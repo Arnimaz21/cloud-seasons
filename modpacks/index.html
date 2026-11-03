@@ -1,0 +1,461 @@
+<!DOCTYPE html><html class="dark stitch-anim-fade-in" lang="ru"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Cloud.Seasons — Официальный сайт сервера Minecraft и авторских сборок</title>
+<meta content="Авторские сборки Minecraft и открытый сервер Cloud.Seasons. Скачивай моды, подключайся по IP mc.arnimaz21.qd.je и играй с друзьями." name="description">
+<meta content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" name="robots">
+<meta content="index, follow" name="googlebot">
+<meta content="Cloud.Seasons, Cloud Seasons, Minecraft сервер Cloud.Seasons, сборки Cloud Seasons, майнкрафт сервер Cloud.Seasons, arnimaz21, mc.arnimaz21.qd.je" name="keywords">
+<meta content="Arnimaz21" name="author">
+<link href="https://arnimaz21.github.io/" rel="canonical">
+<!-- Open Graph / Facebook -->
+<meta content="website" property="og:type">
+<meta content="Cloud.Seasons — Minecraft сервер и авторские сборки" property="og:title">
+<meta content="Авторские сборки Minecraft и открытый сервер Cloud.Seasons. Скачивай моды, подключайся по IP mc.arnimaz21.qd.je и играй с друзьями. Гайды, поддержка, Discord-сообщество." property="og:description">
+<meta content="Cloud.Seasons" property="og:site_name">
+<meta content="https://arnimaz21.github.io/" property="og:url">
+<meta content="https://raw.githubusercontent.com/Arnimaz21/arnimaz21.github.io/main/assets/og-image.png?raw=true" property="og:image">
+<meta content="1200" property="og:image:width">
+<meta content="630" property="og:image:height">
+<meta content="ru_RU" property="og:locale">
+<meta content="Cloud.Seasons Logo" property="og:image:alt">
+<!-- Twitter -->
+<meta content="summary_large_image" name="twitter:card">
+<meta content="Cloud.Seasons — Minecraft сервер и авторские сборки" name="twitter:title">
+<meta content="Авторские сборки Minecraft и открытый сервер Cloud.Seasons. Скачивай моды, подключайся по IP mc.arnimaz21.qd.je и играй с друзьями." name="twitter:description">
+<meta content="https://raw.githubusercontent.com/Arnimaz21/arnimaz21.github.io/main/assets/og-image.png?raw=true" name="twitter:image">
+<!-- Favicons -->
+<link href="https://github.com/Arnimaz21/arnimaz21.github.io/blob/main/assets/seasons/logo.jpg?raw=true" rel="icon" type="image/jpeg">
+<link href="https://github.com/Arnimaz21/arnimaz21.github.io/blob/main/assets/seasons/logo.jpg?raw=true" rel="shortcut icon">
+<link href="https://github.com/Arnimaz21/arnimaz21.github.io/blob/main/assets/seasons/logo.jpg?raw=true" rel="apple-touch-icon">
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          surface: "#0f131c",
+          background: "#0f131c",
+          "surface-dim": "#0a0d14",
+          "surface-container": "#151923",
+          "surface-container-high": "#1c212e",
+          "surface-container-highest": "#282e3f",
+          primary: "#4d8bff",
+          "primary-container": "#2563eb",
+          "primary-fixed": "#afc6ff",
+          secondary: "#a78bfa",
+          "secondary-container": "#5127ad",
+          tertiary: "#26e19a",
+          "on-surface": "#e2e8f0",
+          "on-surface-variant": "#94a3b8",
+          outline: "#475569"
+        },
+        fontFamily: {
+          sans: ["Plus Jakarta Sans", "sans-serif"],
+          headline: ["Space Grotesk", "sans-serif"],
+          mono: ["Space Grotesk", "monospace"]
+        }
+      }
+    }
+  };
+</script>
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: #0f131c;
+    color: #e2e8f0;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Seamless sky fade masking without top-edge clipping */
+  .sky-hero-mask {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 45%, rgba(0,0,0,0.85) 68%, rgba(0,0,0,0.2) 88%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 45%, rgba(0,0,0,0.85) 68%, rgba(0,0,0,0.2) 88%, transparent 100%);
+    transform: translateZ(0);
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 0.28; transform: scale(1.05); }
+  }
+
+  .glow-ambient {
+    animation: pulseGlow 10s ease-in-out infinite alternate;
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://arnimaz21.github.io/#website",
+      "url": "https://arnimaz21.github.io/",
+      "name": "Cloud.Seasons",
+      "alternateName": ["Cloud Seasons", "CloudSeasons"],
+      "description": "Веб-портал сервера Minecraft и авторских сборок Cloud.Seasons.",
+      "inLanguage": "ru-RU"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://arnimaz21.github.io/#organization",
+      "name": "Cloud.Seasons",
+      "url": "https://arnimaz21.github.io/",
+      "logo": "https://raw.githubusercontent.com/Arnimaz21/arnimaz21.github.io/main/assets/seasons/logo.jpg",
+      "sameAs": ["https://discord.gg/EJnDZhfPxQ"]
+    }
+  ]
+}
+</script>
+<meta content="web_standard" name="shell-type"></head>
+<body class="bg-[#0f131c] text-[#e2e8f0] font-sans antialiased relative min-h-screen flex flex-col justify-between selection:bg-primary/30 selection:text-primary-fixed">
+<!-- FIXED NAVBAR -->
+<header class="fixed top-0 inset-x-0 z-50 h-20 bg-[#0f131c]/15 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+<div class="max-w-[1400px] mx-auto h-full px-6 flex items-center justify-between">
+<!-- Left Logo Brand -->
+<a class="flex items-center gap-3.5 group" href="../">
+<div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-primary/20 border border-white/20 bg-surface-container flex items-center justify-center transition-transform group-hover:scale-105">
+<img alt="Cloud.Seasons" class="w-full h-full object-cover" src="https://github.com/Arnimaz21/arnimaz21.github.io/blob/main/assets/seasons/logo.jpg?raw=true">
+</div>
+<div>
+<div class="font-display font-black text-lg tracking-tight text-white flex items-center gap-1 group-hover:text-primary transition-colors">
+          CLOUD<span class="text-primary font-black">.</span>SEASONS
+        </div>
+<div class="text-[10px] uppercase font-mono tracking-widest text-white/50 -mt-1 font-semibold">
+          MINECRAFT PROJECT
+        </div>
+</div>
+</a>
+<!-- Center Navigation Pill -->
+<nav class="hidden md:flex items-center gap-1 bg-[#181b25]/90 border border-white/15 px-3 py-1.5 rounded-full backdrop-blur-md shadow-lg shadow-black/40"><a class="px-4 py-1.5 text-xs font-semibold rounded-full text-white/70 hover:text-white hover:bg-white/5 transition-all" href="../">Главная</a><a class="px-4 py-1.5 text-xs font-semibold rounded-full bg-white/10 text-white shadow-sm border border-white/15 transition-all" href="../modpacks/">Сборки</a>
+<a class="px-4 py-1.5 text-xs font-semibold rounded-full text-white/70 hover:text-white hover:bg-white/5 transition-all" href="../join/">Как играть</a>
+<a class="px-4 py-1.5 text-xs font-semibold rounded-full text-white/70 hover:text-white hover:bg-white/5 transition-all" href="../rules/">Правила</a>
+<a class="px-4 py-1.5 text-xs font-semibold rounded-full text-white/70 hover:text-white hover:bg-white/5 transition-all" href="../bug-report/">Сообщить о баге</a></nav>
+<!-- Right Action Discord -->
+<div class="flex items-center gap-3">
+<a class="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#5865F2]/20 hover:bg-[#5865F2] border border-[#5865F2]/40 hover:border-[#5865F2] text-white text-xs font-semibold transition-all duration-200 shadow-lg shadow-[#5865F2]/10 hover:shadow-[#5865F2]/30 group" href="https://discord.gg/EJnDZhfPxQ" rel="noopener noreferrer" target="_blank">
+<svg class="w-4 h-4 fill-current transition-transform group-hover:scale-110" viewBox="0 0 24 24">
+<path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.078.078 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path>
+</svg>
+<span class="">Discord</span>
+</a>
+</div>
+</div>
+</header>
+<!-- TOP WRAPPER -->
+<div class="relative w-full overflow-hidden">
+<!-- HERO SECTION WITH FULL-SCREEN SKY BACKGROUND -->
+<div class="relative w-full z-10 pt-20">
+<!-- Sky Art Backdrop: edge-to-edge from top with smooth gradient dissolution -->
+<div class="sky-hero-mask absolute inset-x-0 top-0 z-0 h-[880px] md:h-[1050px] w-full select-none pointer-events-none overflow-hidden">
+<img alt="Cloud.Seasons Island Sky" class="w-full h-full object-cover object-top filter brightness-[0.98] contrast-[1.02]" src="https://github.com/Arnimaz21/arnimaz21.github.io/blob/main/assets/seasons/background.png?raw=true">
+<!-- Atmospheric gradients blending into #0f131c -->
+<div class="absolute inset-0 bg-gradient-to-b via-[#0f131c]/60 to-[#0f131c] bg-[#0f131c]/10 from-[#0f131c]/10"></div>
+<div class="absolute inset-x-0 bottom-0 h-96 bg-gradient-to-t from-[#0f131c] via-[#0f131c]/90 to-transparent"></div>
+</div>
+<!-- Hero Content Container -->
+<div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 md:pt-20 pb-12 sm:pb-16">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+<!-- Left: Heading -->
+<div class="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left gap-6">
+<h1 class="font-headline text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-white leading-[1.12] drop-shadow-md">
+            Добро пожаловать в<br>
+<span class="bg-gradient-to-r from-white via-[#b4cfff] to-[#4d8bff] bg-clip-text text-transparent">Cloud.Seasons</span>
+</h1>
+</div>
+<!-- Right: Hero glow backdrop -->
+<div class="lg:col-span-5 flex flex-col items-center justify-center relative mt-4 lg:mt-0 w-full">
+<div class="relative w-full flex items-center justify-center">
+<!-- Glow background -->
+<div class="absolute inset-0 bg-gradient-to-t from-[#4d8bff]/20 via-[#26e19a]/15 to-purple-600/15 blur-3xl rounded-full scale-110 pointer-events-none glow-ambient"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- MAIN BODY -->
+<main class="relative z-10 w-full space-y-6 sm:space-y-8 pb-12"><div class="flex flex-col w-full">
+<div class="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+<!-- CATALOG INTRO / HEADER DECORATION -->
+<div class="relative rounded-3xl bg-surface-container/70 backdrop-blur-xl p-8 sm:p-12 shadow-2xl overflow-hidden">
+<div class="absolute -top-32 -right-24 w-96 h-96 rounded-full bg-primary/10 blur-[100px] pointer-events-none"></div>
+<div class="absolute -bottom-24 -left-20 w-80 h-80 rounded-full bg-tertiary/10 blur-[90px] pointer-events-none"></div>
+<div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="max-w-2xl space-y-4">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-sm">deployed_code</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Официальный репозиторий</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+            Каталог авторских сборок
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl">Сборки для игры на онлайн сервере с друзьями</p>
+</div>
+</div>
+</div>
+<!-- FILTER & SEARCH CONTROL BAR -->
+<div class="space-y-4" id="modpacks-catalog">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+<!-- Search Field -->
+<div class="lg:col-span-6 relative flex items-center bg-[#141824]/95 border border-white/10 rounded-2xl backdrop-blur-md px-4 py-3.5 focus-within:border-[#4d8bff]/40 focus-within:bg-surface-container transition-all"><svg class="w-5 h-5 text-white/50 shrink-0 mr-3 pointer-events-none" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg><input class="w-full bg-transparent text-white placeholder:text-slate-400 font-body-md text-body-md focus:outline-none" id="modpackSearch" placeholder="Поиск" style="border: medium; outline: none; box-shadow: none;" type="text"></div>
+<!-- Sorting & Display Specs -->
+<div class="lg:col-span-6 flex flex-wrap sm:flex-nowrap items-center justify-between lg:justify-end gap-3">
+<div class="relative flex items-center gap-2 bg-[#141824]/95 hover:bg-[#161b29]/90 border border-white/10 rounded-2xl px-4 py-2.5 backdrop-blur-md transition-all"><span class="material-symbols-outlined text-primary text-base shrink-0">tune</span><span class="font-label-sm text-label-sm text-slate-400 uppercase tracking-wider hidden sm:inline">Сортировка:</span><select class="bg-transparent text-white font-label-md text-label-md cursor-pointer focus:outline-none pr-1 appearance-none" style="border: medium; outline: none; box-shadow: none;"><option class="bg-[#141824] text-white" value="latest">Сначала актуальные</option><option class="bg-[#141824] text-white" value="version">По версии Minecraft</option><option class="bg-[#141824] text-white" value="popular">По популярности</option></select><span class="material-symbols-outlined text-slate-400 text-sm pointer-events-none -ml-1">expand_more</span></div>
+<a class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-surface-container-high/80 hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-all shadow-sm border border-white/10" href="../join/">
+<span class="material-symbols-outlined text-primary text-base">help</span>
+            Инструкция по установке
+          </a>
+</div>
+</div>
+</div>
+<!-- MODPACK CATALOG GRID -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6 items-stretch"><div class="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-3 py-16 px-6 rounded-3xl bg-surface-container/40 backdrop-blur-xl border border-white/10 text-center flex flex-col items-center justify-center space-y-4 shadow-xl"><div class="w-14 h-14 rounded-2xl bg-surface-container-high/80 border border-white/10 flex items-center justify-center text-primary shadow-inner"><span class="material-symbols-outlined text-3xl">inventory_2</span></div><div class="space-y-1.5"><h3 class="font-headline text-lg sm:text-xl font-bold text-white tracking-tight">Сборки обновляются</h3><p class="font-body-md text-xs sm:text-sm text-on-surface-variant max-w-md mx-auto leading-relaxed">Каталог сборок в данный момент формируется и готовится к релизу. Следите за анонсами в нашем Discord-сообществе!</p></div><a class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-headline text-xs font-semibold transition-all active:scale-95" href="https://discord.gg/EJnDZhfPxQ" rel="noopener noreferrer" target="_blank"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.078.078 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg> <span class="">Обсудить в Discord</span></a></div></div>
+</div>
+</div>
+</main>
+</div>
+<!-- SECTION 6: FOOTER -->
+<footer class="relative z-10 w-full border-t border-white/10 bg-[#0b0e15]/95 backdrop-blur-md mt-8 sm:mt-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-8 sm:py-10">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+<!-- Project Info -->
+<div class="sm:col-span-2 lg:col-span-4 flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-[#4d8bff] flex items-center justify-center text-white shadow-md overflow-hidden ring-1 ring-white/15">
+<img alt="Cloud.Seasons Logo" class="w-full h-full object-cover" src="https://github.com/Arnimaz21/arnimaz21.github.io/blob/main/assets/seasons/logo.jpg?raw=true">
+</div>
+<span class="font-headline text-lg sm:text-xl font-bold tracking-tight text-white">Cloud.Seasons</span>
+</div>
+<p class="font-sans text-xs text-slate-400 max-w-xs leading-relaxed">
+          Уникальный проект с авторскими сборками и открытым сервером
+        </p>
+</div>
+<!-- Navigation -->
+<div class="lg:col-span-2 flex flex-col gap-3">
+<span class="font-headline text-xs font-bold uppercase tracking-wider text-white">НАВИГАЦИЯ</span>
+<ul class="flex flex-col gap-2 font-sans text-xs"><li class=""><a class="text-slate-400 hover:text-white transition-colors py-1 inline-block" href="#modpacks-catalog">Каталог сборок</a></li>
+<li class=""><a class="text-slate-400 hover:text-white transition-colors py-1 inline-block" href="#">Главная</a></li>
+<li class=""><button class="text-slate-400 hover:text-white transition-colors py-1 inline-block text-left cursor-pointer" onclick="window.openAboutModal &amp;&amp; window.openAboutModal()" type="button">О проекте</button></li>
+</ul>
+</div>
+<!-- Support -->
+<div class="lg:col-span-3 flex flex-col gap-3">
+<span class="font-headline text-xs font-bold uppercase tracking-wider text-white">ПОДДЕРЖКА</span>
+<ul class="flex flex-col gap-2 font-sans text-xs">
+<li class=""><a class="text-slate-400 hover:text-white transition-colors py-1 inline-block" href="../rules/">Правила проекта</a></li>
+<li class=""><a class="text-slate-400 hover:text-white transition-colors py-1 inline-block" href="../bug-report/">Сообщить о баге</a></li>
+</ul>
+</div>
+<!-- Community -->
+<div class="sm:col-span-2 lg:col-span-3 flex flex-col gap-3">
+<span class="font-headline text-xs font-bold uppercase tracking-wider text-white">СООБЩЕСТВО</span>
+<p class="font-sans text-xs text-slate-400 leading-relaxed">Присоединяйтесь к общению, делитесь скриншотами и голосуйте за обновления.</p>
+<div class="flex items-center gap-2 pt-1">
+<a class="w-10 h-10 sm:w-9 sm:h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-all shadow-sm active:scale-95" href="https://discord.gg/EJnDZhfPxQ" rel="noopener noreferrer" target="_blank" title="Discord">
+<svg class="w-[18px] h-[18px] fill-current" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg>
+</a>
+<a class="w-10 h-10 sm:w-9 sm:h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white transition-all shadow-sm active:scale-95" href="#" title="Сайт">
+<span class="material-symbols-outlined text-[18px]">language</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- SECTION 7: INTERACTIVE ABOUT PROJECT MODAL DIALOG -->
+<div aria-hidden="true" aria-labelledby="modalTitle" aria-modal="true" class="fixed inset-0 z-50 items-center justify-center p-4 sm:p-6 transition-all duration-300 ease-out opacity-0 pointer-events-none hidden" id="aboutModal" role="dialog" style="display: none;">
+<!-- Backdrop Blur with dark gradient -->
+<div class="absolute inset-0 bg-[#07090f]/85 backdrop-blur-md transition-opacity duration-300 opacity-0" id="aboutModalBackdrop"></div>
+<!-- Modal Container Card -->
+<div class="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-3xl bg-[#141824]/95 border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.8)] overflow-hidden transition-all duration-300 ease-out z-10 scale-95 opacity-0" id="aboutModalPanel">
+<div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-[#4d8bff]/15 blur-[80px] pointer-events-none"></div>
+<div class="absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-[#26e19a]/10 blur-[80px] pointer-events-none"></div>
+<!-- Modal Header -->
+<div class="relative flex items-center justify-between px-6 py-5 border-b border-white/10 bg-[#161b29]/80 shrink-0">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#2563eb]/40 to-[#4d8bff]/30 border border-[#4d8bff]/30 flex items-center justify-center text-[#82aaff] shadow-inner">
+<span class="material-symbols-outlined text-2xl">auto_awesome</span>
+</div>
+<div>
+<h3 class="font-headline text-lg sm:text-xl font-bold text-white tracking-tight" id="modalTitle">О проекте Cloud.Seasons</h3>
+</div>
+</div>
+<button aria-label="Закрыть модальное окно" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-all active:scale-95 cursor-pointer" id="closeAboutModalBtn" type="button">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+</div>
+<!-- Modal Content -->
+<div class="relative px-6 py-6 overflow-y-auto space-y-6 text-sm text-slate-300 font-sans leading-relaxed">
+<!-- Section: Key Features -->
+<div class="space-y-3">
+<h4 class="font-headline text-xs font-bold uppercase tracking-wider text-[#82aaff] flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">verified</span> Ключевые особенности
+        </h4>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div class="p-3.5 rounded-2xl bg-[#0f131c]/70 border border-white/5 flex gap-3 items-start">
+<span class="material-symbols-outlined text-xl text-[#4d8bff] shrink-0 mt-0.5">deployed_code</span>
+<div>
+<div class="font-headline text-xs font-bold text-white">Авторские сборки</div>
+<p class="text-xs text-slate-400 mt-0.5">Уникальные модпаки и оптимизированный геймплей от Arnimaz21</p>
+</div>
+</div>
+<div class="p-3.5 rounded-2xl bg-[#0f131c]/70 border border-white/5 flex gap-3 items-start">
+<span class="material-symbols-outlined text-xl text-[#26e19a] shrink-0 mt-0.5">dns</span>
+<div>
+<div class="font-headline text-xs font-bold text-white">Открытый сервер</div>
+<p class="text-xs text-slate-400 mt-0.5">Сервер открытый для всех игроков по адресу <code class="font-mono text-emerald-400 bg-emerald-400/10 px-1 py-0.5 rounded">mc.arnimaz21.qd.je</code></p>
+</div>
+</div>
+<div class="p-3.5 rounded-2xl bg-[#0f131c]/70 border border-white/5 flex gap-3 items-start">
+<span class="material-symbols-outlined text-xl text-[#a78bfa] shrink-0 mt-0.5">bolt</span>
+<div>
+<div class="font-headline text-xs font-bold text-white">Активное развитие</div>
+<p class="text-xs text-slate-400 mt-0.5">Регулярные обновления сезонов, оперативные исправления и открытый канал обратной связи.</p>
+</div>
+</div>
+<div class="p-3.5 rounded-2xl bg-[#0f131c]/70 border border-white/5 flex gap-3 items-start">
+<span class="material-symbols-outlined text-xl text-[#afc6ff] shrink-0 mt-0.5">forum</span>
+<div>
+<div class="font-headline text-xs font-bold text-white">Discord-сообщество</div>
+<p class="text-xs text-slate-400 mt-0.5">Голосования, патч-ноуты, скриншоты игроков и техническая поддержка.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: Team Members -->
+<div class="space-y-3">
+<h4 class="font-headline text-xs font-bold uppercase tracking-wider text-[#82aaff] flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base">groups</span> Команда проекта
+        </h4>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<!-- Arnimaz21 card -->
+<div class="p-3.5 rounded-2xl bg-[#0f131c]/70 border border-white/5 flex items-center gap-3.5 hover:border-white/10 transition-colors">
+<div class="w-14 h-14 rounded-xl bg-[#141824] border border-[#4d8bff]/30 overflow-hidden flex items-center justify-center shrink-0 shadow-inner p-1">
+<img alt="Arnimaz21" class="w-full h-full object-contain filter drop-shadow" src="https://github.com/Arnimaz21/arnimaz21.github.io/blob/main/assets/skins/Arnimaz21.png?raw=true">
+</div>
+<div class="min-w-0 flex flex-col justify-center">
+<div class="font-headline text-sm font-bold text-white flex items-center gap-2">
+<span class="">Arnimaz21</span>
+<span class="w-2 h-2 rounded-full bg-[#4d8bff] shadow-[0_0_8px_#4d8bff] shrink-0"></span>
+</div>
+<div class="text-xs font-headline font-semibold text-[#82aaff] mt-0.5">Создатель / Ведущий сборщик</div>
+<div class="text-[11px] text-slate-400 mt-0.5 truncate">Сборка и серверная часть</div>
+</div>
+</div>
+<!-- Linqsha card -->
+<div class="p-3.5 rounded-2xl bg-[#0f131c]/70 border border-white/5 flex items-center gap-3.5 hover:border-white/10 transition-colors">
+<div class="w-14 h-14 rounded-xl bg-[#141824] border border-[#4d8bff]/30 overflow-hidden flex items-center justify-center shrink-0 shadow-inner p-1">
+<img alt="Linqsha Skin" class="w-full h-full object-contain filter drop-shadow" src="https://github.com/Arnimaz21/arnimaz21.github.io/blob/main/assets/skins/linqsha.png?raw=true">
+</div>
+<div class="min-w-0 flex flex-col justify-center">
+<div class="font-headline text-sm font-bold text-white flex items-center gap-2">
+<span class="">Linqsha</span>
+<span class="w-2 h-2 rounded-full bg-[#26e19a] shadow-[0_0_8px_#26e19a] shrink-0"></span>
+</div>
+<div class="text-xs font-headline font-semibold text-[#26e19a] mt-0.5">Помощник проекта</div>
+<div class="text-[11px] text-slate-400 mt-0.5 truncate">Тестирование и контент</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Footer Actions -->
+<div class="px-6 py-4 border-t border-white/10 bg-[#161b29]/90 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+<div class="text-xs text-slate-400 hidden sm:block">
+        Присоединяйся к нам!
+      </div>
+<div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+<button class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 transition-all font-headline text-xs font-semibold active:scale-95 cursor-pointer" id="cancelAboutModalBtn" type="button">
+          Закрыть
+        </button>
+<a class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#4d8bff] hover:bg-[#3b7bf5] text-white shadow-lg shadow-blue-500/20 font-headline text-xs font-semibold transition-all active:scale-95 cursor-pointer" href="https://discord.gg/EJnDZhfPxQ" rel="noopener noreferrer" target="_blank">
+<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"></path></svg>
+<span class="">Наш Discord</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- SCRIPTS: MODAL LOGIC -->
+<script>
+  /* Modal Controller */
+  (function initModal() {
+    const modal = document.getElementById('aboutModal');
+    const backdrop = document.getElementById('aboutModalBackdrop');
+    const panel = document.getElementById('aboutModalPanel');
+    const closeBtn = document.getElementById('closeAboutModalBtn');
+    const cancelBtn = document.getElementById('cancelAboutModalBtn');
+
+    if (!modal || !panel || !backdrop) return;
+
+    let isTransitioning = false;
+
+    window.openAboutModal = function() {
+      if (isTransitioning) return;
+      modal.style.display = 'flex';
+      modal.classList.remove('hidden', 'pointer-events-none');
+      modal.classList.add('pointer-events-auto');
+      modal.setAttribute('aria-hidden', 'false');
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          modal.classList.remove('opacity-0');
+          modal.classList.add('opacity-100');
+          backdrop.classList.remove('opacity-0');
+          backdrop.classList.add('opacity-100');
+          panel.classList.remove('scale-95', 'opacity-0');
+          panel.classList.add('scale-100', 'opacity-100');
+        });
+      });
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeAboutModal = function() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      modal.setAttribute('aria-hidden', 'true');
+      modal.classList.remove('opacity-100');
+      modal.classList.add('opacity-0');
+      backdrop.classList.remove('opacity-100');
+      backdrop.classList.add('opacity-0');
+      panel.classList.remove('scale-100', 'opacity-100');
+      panel.classList.add('scale-95', 'opacity-0');
+
+      setTimeout(() => {
+        modal.classList.remove('pointer-events-auto');
+        modal.classList.add('pointer-events-none', 'hidden');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+        isTransitioning = false;
+      }, 300);
+    };
+
+    if (closeBtn) closeBtn.addEventListener('click', window.closeAboutModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', window.closeAboutModal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal || e.target === backdrop) window.closeAboutModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+        window.closeAboutModal();
+      }
+    });
+  })();
+</script>
+<style id="custom-scrollbar-hide">html, body { scrollbar-width: none !important; -ms-overflow-style: none !important; } html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; background: transparent !important; } * { scrollbar-width: none !important; -ms-overflow-style: none !important; }</style>
+
+</body></html>

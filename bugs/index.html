@@ -1,0 +1,1544 @@
+<!DOCTYPE html><html class="dark" lang="ru"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Админ-панель — Авторизация и тикеты Cloud.Seasons</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: "#4d8bff",
+              sky: "#38bdf8",
+              emerald: "#10b981",
+              purple: "#a855f7",
+              dark: "#0a0e17",
+              surface: "#0f131c",
+              card: "#161b26",
+              border: "rgba(255, 255, 255, 0.08)",
+              glow: "rgba(77, 139, 255, 0.25)"
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    body {
+      background-color: #0a0e17;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: rgba(15, 19, 28, 0.6);
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(77, 139, 255, 0.5);
+    }
+    .glass-card {
+      background: rgba(22, 27, 38, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card:hover {
+      border-color: rgba(77, 139, 255, 0.3);
+    }
+    .glow-cyan {
+      box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.3);
+    }
+    .glow-blue {
+      box-shadow: 0 0 25px -5px rgba(77, 139, 255, 0.35);
+    }
+    .glow-rose {
+      box-shadow: 0 0 25px -5px rgba(244, 63, 94, 0.35);
+    }
+    .glow-purple {
+      box-shadow: 0 0 25px -5px rgba(168, 85, 247, 0.35);
+    }
+    .glow-emerald {
+      box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.35);
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      animation: spin 1s linear infinite;
+    }
+  </style>
+</head>
+<body class="selection:bg-brand-blue/30 selection:text-white min-h-screen flex flex-col justify-between relative bg-[#0a0e17]">
+<!-- Immersive Aetherial Voxel Horizon Background Artwork with Dark Gradients -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+<img alt="Cloud Seasons Artwork Background" class="w-full h-full object-cover object-center opacity-30 filter brightness-90 saturate-125 scale-105 transform" src="https://raw.githubusercontent.com/Arnimaz21/arnimaz21.github.io/main/assets/seasons/background.png">
+<div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17]/70 via-[#0a0e17]/85 to-[#0a0e17]"></div>
+<div class="absolute inset-0 from-transparent via-[#0a0e17]/60 to-[#0a0e17]"></div>
+<div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[850px] h-[350px] bg-brand-blue/15 blur-[140px] rounded-full pointer-events-none"></div>
+</div>
+<!-- A. Top Admin Header (Active when authenticated) -->
+<header class="relative z-30 border-b border-white/[0.08] bg-[#0a0e17]/80 backdrop-blur-xl sticky top-0 hidden" id="topAdminHeader">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+<!-- Brand & Link to Main Page -->
+<div class="flex items-center gap-6">
+<a class="flex items-center gap-3 group" href="../">
+<div class="relative w-10 h-10 rounded-xl overflow-hidden border border-white/10 group-hover:border-brand-blue/60 transition-all shadow-[0_0_15px_rgba(77,139,255,0.25)] shrink-0 bg-[#161b26]">
+<img alt="Cloud.Seasons Logo" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src="https://raw.githubusercontent.com/Arnimaz21/arnimaz21.github.io/main/assets/seasons/logo.jpg">
+</div>
+<div class="flex flex-col">
+<span class="font-display font-bold text-lg tracking-tight text-white flex items-center gap-2">
+              Cloud.Seasons
+              <span class="text-[10px] uppercase font-mono tracking-widest px-2 py-0.5 rounded bg-brand-blue/20 text-brand-sky border border-brand-blue/30 font-bold leading-tight">Admin</span>
+</span>
+</div>
+</a>
+</div>
+<!-- Actions & Profile Info -->
+<div class="flex items-center gap-3">
+<a class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium text-slate-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:text-white transition-all shadow-sm" href="../">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span class="hidden sm:inline">На главную</span>
+</a>
+<button class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium text-slate-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:text-white transition-all shadow-sm cursor-pointer" id="exportBtn" title="Экспорт всех обращений в JSON" type="button">
+<span class="material-symbols-outlined text-[16px] text-brand-sky">download</span>
+<span class="hidden sm:inline">Экспорт JSON</span>
+</button>
+<!-- Status indicator badge -->
+
+<button class="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-medium text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-all shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" id="adminLogoutBtn" title="Выйти из учетной записи" type="button">
+<span class="material-symbols-outlined text-[16px]" id="adminLogoutIcon">logout</span>
+<span class="hidden sm:inline" id="adminLogoutText">Выйти</span>
+</button>
+</div>
+</div>
+</header>
+<!-- B. Auth Screen (Login - Shown if not authenticated) -->
+<section class="relative z-20 flex-1 max-w-md w-full mx-auto px-4 py-12 flex flex-col items-center justify-center my-auto transition-all" id="authScreen">
+<div class="glass-card rounded-3xl p-6 sm:p-8 w-full border border-white/10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] relative overflow-hidden backdrop-blur-2xl">
+<div class="absolute -right-8 -bottom-8 w-32 h-32 bg-brand-blue/15 rounded-full blur-2xl pointer-events-none"></div>
+<!-- Icon & Headers -->
+<div class="flex flex-col items-center text-center mb-6">
+<div class="relative w-16 h-16 rounded-2xl overflow-hidden border border-white/15 shadow-[0_0_25px_rgba(77,139,255,0.3)] mb-4 bg-[#161b26] p-1">
+<img alt="Cloud.Seasons" class="w-full h-full object-cover rounded-xl" src="https://raw.githubusercontent.com/Arnimaz21/arnimaz21.github.io/main/assets/seasons/logo.jpg">
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-blue/15 border border-brand-blue/30 text-brand-sky text-[10px] font-mono font-bold uppercase tracking-wider mb-2">
+<span class="material-symbols-outlined text-[14px]">security</span>
+          ВХОД ТОЛЬКО ДЛЯ АДМИНИСТРАТОРОВ
+        </div>
+<h2 class="text-2xl font-display font-bold text-white tracking-tight">Вход в панель управления</h2>
+<p class="text-xs text-slate-400 mt-1.5 max-w-xs leading-relaxed">Авторизуйтесь для управления баг-репортами и тикетами игроков Cloud.Seasons</p>
+</div>
+<!-- Friendly Error Alert Banner -->
+<div class="hidden mb-4 p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-medium flex items-start gap-2.5 transition-all" id="authErrorAlert">
+<span class="material-symbols-outlined text-[18px] shrink-0 text-rose-400">error</span>
+<div class="flex-1 text-left leading-snug" id="authErrorMsg">Неверный логин или пароль</div>
+</div>
+<!-- Login Form -->
+<form class="flex flex-col gap-4" id="adminLoginForm">
+<div class="flex flex-col gap-1.5">
+<label class="text-[11px] font-mono uppercase tracking-wider text-slate-300 font-semibold flex items-center gap-1.5" for="loginEmail">
+<span class="material-symbols-outlined text-[14px] text-brand-sky">mail</span>Логин администратора
+          </label>
+<div class="relative">
+<input autocomplete="email" class="w-full bg-[#0a0e17]/90 text-white placeholder-slate-500 text-sm px-3.5 py-2.5 rounded-xl border border-white/10 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 focus:outline-none transition-all shadow-inner" id="loginEmail" placeholder="admin@cloudseasons.ru" required="" type="email">
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-[11px] font-mono uppercase tracking-wider text-slate-300 font-semibold flex items-center gap-1.5" for="loginPassword">
+<span class="material-symbols-outlined text-[14px] text-brand-sky">key</span>
+            Пароль доступа
+          </label>
+<div class="relative">
+<input autocomplete="current-password" class="w-full bg-[#0a0e17]/90 text-white placeholder-slate-500 text-sm pl-3.5 pr-10 py-2.5 rounded-xl border border-white/10 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 focus:outline-none transition-all shadow-inner" id="loginPassword" placeholder="••••••••••••" required="" type="password">
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition flex items-center justify-center cursor-pointer" id="togglePwdBtn" type="button">
+<span class="material-symbols-outlined text-[18px]" id="togglePwdIcon">visibility</span>
+</button>
+</div>
+</div>
+<button class="mt-2 w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-brand-blue hover:bg-brand-blue/90 text-white font-display font-bold text-sm tracking-wide shadow-[0_0_20px_rgba(77,139,255,0.4)] transition-all active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer" id="authSubmitBtn" type="submit">
+<span class="material-symbols-outlined text-[18px]" id="authSubmitIcon">login</span>
+<span id="authSubmitText" class="">Войти в систему</span>
+</button>
+</form>
+<div class="mt-5 pt-4 border-t border-white/[0.07] text-center">
+<span class="text-[11px] text-slate-500 font-sans">Доступ разрешен только подтвержденным администраторам сервера</span>
+</div>
+</div>
+</section>
+<!-- C. Admin Dashboard Main Container (Active after authentication) -->
+<main class="relative z-10 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8 hidden" id="adminDashboardContainer">
+<!-- Title Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-brand-sky text-xs font-mono font-medium mb-3">
+<span class="material-symbols-outlined text-[14px]">bug_report</span>
+          Мониторинг ошибок и тикетов комьюнити
+        </div>
+<h1 class="text-3xl sm:text-4xl font-display font-bold text-white tracking-tight">
+          Управление обращениями и багами
+        </h1>
+<p class="text-slate-400 text-sm mt-1 max-w-2xl leading-relaxed">
+          Централизованная система тикетов игроков с серверов Cloud.Seasons. Отслеживайте краши клиента, баги сборок и запросы в реальном времени.
+        </p>
+</div>
+<div class="flex items-center gap-2.5 shrink-0">
+<button class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-sky border border-brand-blue/20 transition-all text-xs font-medium cursor-pointer shadow-sm" id="syncDbBtn" title="Синхронизировать с Supabase" type="button">
+<span class="material-symbols-outlined text-[18px] text-brand-sky" id="syncIcon">cloud_sync</span>
+<span class="">Синхронизация</span>
+</button>
+</div>
+</div>
+<!-- 4 Glassmorphism KPI Stat Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Total Tickets Card -->
+<div class="glass-card rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:-translate-y-1">
+<div class="absolute -right-6 -bottom-6 w-24 h-24 bg-brand-blue/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-mono">Всего репортов</span>
+<div class="w-10 h-10 rounded-xl bg-brand-blue/15 border border-brand-blue/30 flex items-center justify-center text-brand-sky">
+<span class="material-symbols-outlined text-[20px]">layers</span>
+</div>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-display font-bold text-white tracking-tight" id="kpiTotal">0</span>
+<span class="text-xs font-mono text-emerald-400 flex items-center font-medium" id="kpiTodayCount">
+<span class="material-symbols-outlined text-[14px]">north_east</span> +0 сегодня
+            </span>
+</div>
+<p class="text-[11px] text-slate-400 mt-1">Все обращения за текущий сезон</p>
+</div>
+<div class="mt-4 w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-gradient-to-r from-brand-blue to-brand-sky h-full rounded-full transition-all duration-500" id="barTotal" style="width: 0%;"></div>
+</div>
+</div>
+<!-- New in Queue -->
+<div class="glass-card rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:-translate-y-1">
+<div class="absolute -right-6 -bottom-6 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-mono">В очереди / Новые</span>
+<div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+</div>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-display font-bold text-amber-400 tracking-tight" id="kpiNew">0</span>
+<span class="text-xs font-mono px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-300 font-medium" id="kpiNewStatus">Очередь пуста</span>
+</div>
+<p class="text-[11px] text-slate-400 mt-1">Требуют первичного рассмотрения</p>
+</div>
+<div class="mt-4 w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-amber-400 h-full rounded-full transition-all duration-500" id="barNew" style="width: 0%;"></div>
+</div>
+</div>
+<!-- In Progress -->
+<div class="glass-card rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:-translate-y-1">
+<div class="absolute -right-6 -bottom-6 w-24 h-24 bg-brand-sky/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-mono">В разработке</span>
+<div class="w-10 h-10 rounded-xl bg-brand-sky/15 border border-brand-sky/30 flex items-center justify-center text-brand-sky">
+<span class="material-symbols-outlined text-[20px]">engineering</span>
+</div>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-display font-bold text-brand-sky tracking-tight" id="kpiProgress">0</span>
+<span class="text-xs font-mono px-2 py-0.5 rounded-md bg-brand-sky/10 border border-brand-sky/20 text-brand-sky font-medium" id="kpiProgressStatus">0 в работе</span>
+</div>
+<p class="text-[11px] text-slate-400 mt-1">Передано разработчикам сборки</p>
+</div>
+<div class="mt-4 w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-brand-sky h-full rounded-full transition-all duration-500" id="barProgress" style="width: 0%;"></div>
+</div>
+</div>
+<!-- Resolved / Closed -->
+<div class="glass-card rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:-translate-y-1">
+<div class="absolute -right-6 -bottom-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-mono">Решено / Закрыто</span>
+<div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+</div>
+</div>
+<div class="mt-4">
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-display font-bold text-emerald-400 tracking-tight" id="kpiResolved">0</span>
+<span class="text-xs font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-medium" id="kpiResolvedRate">0% закрыто</span>
+</div>
+<p class="text-[11px] text-slate-400 mt-1">Успешно закрытые инциденты</p>
+</div>
+<div class="mt-4 w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+<div class="bg-emerald-400 h-full rounded-full transition-all duration-500" id="barResolved" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+<!-- Controls Console: Search, Filters & Category Tabs -->
+<div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-4 border border-white/10 shadow-xl">
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+<!-- Search Input -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px] pointer-events-none">search</span>
+<input class="w-full bg-[#0a0e17]/80 text-white placeholder-slate-500 text-sm pl-11 pr-4 py-2.5 rounded-xl border border-white/10 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 focus:outline-none transition-all shadow-inner" id="searchInput" placeholder="Поиск по названию, игроку или коду ошибки..." type="text">
+</div>
+<!-- Filter Dropdowns -->
+<div class="flex flex-wrap items-center gap-2.5">
+<!-- Status Dropdown -->
+<div class="flex items-center gap-2 bg-[#0a0e17]/80 px-3 py-2 rounded-xl border border-white/10 text-xs text-slate-300">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">filter_list</span>
+<select class="bg-transparent text-white text-xs focus:outline-none cursor-pointer border-none p-0 pr-6" id="statusFilter">
+<option class="bg-[#161b26] text-white" value="all">Все статусы</option>
+<option class="bg-[#161b26] text-white" value="new">Новый / В очереди</option>
+<option class="bg-[#161b26] text-white" value="progress">В работе</option>
+<option class="bg-[#161b26] text-white" value="resolved">Решено</option>
+<option class="bg-[#161b26] text-white" value="rejected">Отклонено</option>
+</select>
+</div>
+<!-- Sort Dropdown -->
+<div class="flex items-center gap-2 bg-[#0a0e17]/80 px-3 py-2 rounded-xl border border-white/10 text-xs text-slate-300">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">sort</span>
+<select class="bg-transparent text-white text-xs focus:outline-none cursor-pointer border-none p-0 pr-6" id="sortFilter">
+<option class="bg-[#161b26] text-white" value="date_desc">Сначала новые</option>
+<option class="bg-[#161b26] text-white" value="date_asc">Сначала старые</option>
+<option class="bg-[#161b26] text-white" value="priority">По приоритету</option>
+</select>
+</div>
+<!-- Reset Filter Button -->
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/5 transition-all text-xs font-medium cursor-pointer" id="clearFiltersBtn" type="button">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+<span class="">Сброс</span>
+</button>
+</div>
+</div>
+<!-- Category Filter Pills -->
+<div class="flex flex-wrap items-center gap-2 pt-2 border-t border-white/[0.06]" id="categoryChips">
+<button class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border bg-brand-blue text-white border-brand-blue shadow-[0_0_12px_rgba(77,139,255,0.4)] active cursor-pointer" data-cat="all">
+          Все (<span id="countCatAll" class="">0</span>)
+        </button>
+<button class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-medium transition-all hover:text-white hover:bg-white/[0.07] border bg-white/[0.03] text-slate-400 border-white/5 cursor-pointer" data-cat="server">
+          Сервер / Краш (<span id="countCatCrash" class="">0</span>)
+        </button>
+<button class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white/[0.03] text-slate-400 hover:text-white hover:bg-white/[0.07] border border-white/5 cursor-pointer" data-cat="web">
+          Веб-сайт (<span id="countCatWeb" class="">0</span>)
+        </button>
+<button class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white/[0.03] text-slate-400 hover:text-white hover:bg-white/[0.07] border border-white/5 cursor-pointer" data-cat="pack">
+          Сборка / Баланс (<span id="countCatPack" class="">0</span>)
+        </button>
+<button class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white/[0.03] text-slate-400 hover:text-white hover:bg-white/[0.07] border border-white/5 cursor-pointer" data-cat="visual">
+          Визуал (<span id="countCatVisual" class="">0</span>)
+        </button>
+<button class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-medium transition-all bg-white/[0.03] text-slate-400 hover:text-white hover:bg-white/[0.07] border border-white/5 cursor-pointer" data-cat="other">
+          Другое (<span id="countCatOther" class="">0</span>)
+        </button>
+</div>
+</div>
+<!-- Batch Selection Actions Bar -->
+<div class="hidden glass-card rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 border border-brand-blue/30 bg-brand-blue/10" id="batchActionsBar">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-brand-sky text-[20px]">checklist</span>
+<span class="text-xs font-semibold text-white">
+          Выбрано тикетов: <span class="text-brand-sky font-mono font-bold" id="selectedCount">0</span>
+</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white font-semibold text-xs transition shadow-sm cursor-pointer" id="batchResolveBtn" type="button">
+          Отметить решенными
+        </button>
+<button class="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 font-semibold text-xs transition cursor-pointer" id="batchDeleteBtn" type="button">
+          Удалить выбранные
+        </button>
+</div>
+</div>
+<!-- Bug Reports List Container -->
+<div class="flex flex-col gap-3" id="ticketsList"></div>
+<!-- Clean Empty State (Shown when 0 tickets exist) -->
+<div class="glass-card rounded-2xl p-10 sm:p-16 flex flex-col items-center justify-center text-center relative overflow-hidden border border-white/10 shadow-xl" id="emptyState">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-tr from-brand-blue/20 via-brand-sky/15 to-transparent border border-brand-blue/30 flex items-center justify-center text-brand-sky shadow-[0_0_30px_rgba(77,139,255,0.2)] mb-5 relative group">
+<div class="absolute inset-0 rounded-3xl bg-brand-blue/10 animate-ping opacity-25"></div>
+<span class="material-symbols-outlined text-[42px] sm:text-[48px]">verified_user</span>
+</div>
+<h3 class="font-display text-2xl font-bold text-white tracking-tight">Обращений пока нет</h3>
+<p class="text-slate-400 text-sm max-w-xl mt-2 leading-relaxed">
+        Новые репорты от игроков появятся здесь автоматически в реальном времени.
+      </p>
+<div class="flex flex-wrap items-center justify-center gap-3 mt-6">
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 border border-white/10 text-xs font-medium transition cursor-pointer" id="emptyReloadBtn" type="button">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span class="">Обновить данные</span>
+</button>
+</div>
+</div>
+</main>
+<!-- D. Ticket Details Modal Dialog -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#0a0e17]/85 backdrop-blur-md transition-opacity duration-200 hidden" id="ticketDetailModal" onclick="if(event.target === this) closeTicketDetails();">
+<div class="relative w-full max-w-2xl bg-[#161b26] border border-white/15 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] flex flex-col max-h-[90vh] overflow-hidden transform transition-all duration-200" id="ticketDetailModalCard" onclick="event.stopPropagation()">
+<!-- Modal Header -->
+<div class="p-5 sm:p-6 bg-[#0f131c]/95 border-b border-white/10 flex items-center justify-between shrink-0">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-brand-blue/15 border border-brand-blue/30 flex items-center justify-center text-brand-sky shrink-0 shadow-[0_0_15px_rgba(77,139,255,0.25)]">
+<span class="material-symbols-outlined text-[22px]">contact_support</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-2">
+<h3 class="font-display font-bold text-white text-lg tracking-tight truncate">Детали обращения</h3>
+<span class="text-xs font-mono font-bold text-brand-sky bg-brand-blue/10 px-2 py-0.5 rounded border border-brand-blue/20 shrink-0" id="modalTicketBadgeId">#1</span>
+</div>
+<p class="text-xs text-slate-400 truncate">Карточка тикета игрока сообщества Cloud.Seasons</p>
+</div>
+</div>
+<button class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition cursor-pointer text-lg leading-none" id="modalCloseXBtn" onclick="closeTicketDetails()" title="Закрыть (Esc)" type="button">
+          ✕
+        </button>
+</div>
+<!-- Modal Content -->
+<div class="p-5 sm:p-6 flex flex-col gap-4 overflow-y-auto custom-scroll flex-1">
+<!-- Row: От кого & Когда пришло -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<!-- Author -->
+<div class="p-4 rounded-2xl bg-[#0a0e17]/80 border border-white/[0.08] flex items-center gap-3.5">
+<div class="w-11 h-11 rounded-xl bg-brand-blue/10 border border-brand-blue/20 flex items-center justify-center text-brand-sky shrink-0">
+<span class="material-symbols-outlined text-[22px]">person</span>
+</div>
+<div class="min-w-0">
+<span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold block">ОТ КОГО (ИГРОК)</span>
+<span class="font-display font-bold text-base text-white truncate block mt-0.5" id="modalAuthor">Аноним</span>
+</div>
+</div>
+<!-- Time -->
+<div class="p-4 rounded-2xl bg-[#0a0e17]/80 border border-white/[0.08] flex items-center gap-3.5">
+<div class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 shrink-0">
+<span class="material-symbols-outlined text-[22px]">schedule</span>
+</div>
+<div class="min-w-0">
+<span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold block">КОГДА ПРИШЛО</span>
+<span class="font-sans text-xs sm:text-sm text-slate-200 truncate block mt-0.5" id="modalTime">Только что</span>
+</div>
+</div>
+</div>
+<!-- Category -->
+<div class="flex flex-col gap-1.5">
+<span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-brand-sky">label</span>
+            КАТЕГОРИЯ
+          </span>
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider border shadow-sm bg-rose-500/15 border-rose-500/30 text-rose-400" id="modalCategoryBadge">Сервер / Краш</span>
+</div>
+</div>
+<!-- Title -->
+<div class="flex flex-col gap-1.5">
+<span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-brand-sky">title</span>
+            ЗАГОЛОВОК
+          </span>
+<div class="p-4 rounded-2xl bg-[#0a0e17]/80 border border-white/[0.08]">
+<h2 class="text-base sm:text-lg font-display font-bold text-white leading-snug" id="modalTitle">—</h2>
+</div>
+</div>
+<!-- Description -->
+<div class="flex flex-col gap-1.5">
+<span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-brand-sky">description</span>
+            ПРИЧИНА / ОПИСАНИЕ ПРОБЛЕМЫ
+          </span>
+<div class="p-4 rounded-2xl bg-[#0a0e17]/80 border border-white/[0.08] text-sm text-slate-200 leading-relaxed font-sans min-h-[90px] whitespace-pre-wrap selection:bg-brand-blue/30" id="modalDesc">Описание не указано</div>
+</div>
+<!-- Media / Screenshot Box -->
+<div class="flex flex-col gap-1.5" id="modalMediaSection">
+<span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-brand-sky">photo_camera</span>
+            МЕДИА / СКРИНШОТ
+          </span>
+<div class="p-4 rounded-2xl bg-[#0a0e17]/80 border border-white/[0.08] flex flex-col gap-3" id="modalMediaBox">
+<div class="flex items-center justify-between gap-3 flex-wrap">
+<div class="flex items-center gap-2.5 min-w-0 flex-1">
+<span class="shrink-0 text-base" id="modalMediaIcon">🔗</span>
+<a class="text-xs sm:text-sm font-mono text-brand-sky hover:underline break-all truncate" href="#" id="modalMediaLink" rel="noopener noreferrer" target="_blank">—</a>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="text-[10px] font-mono uppercase px-2.5 py-1 rounded bg-brand-blue/15 border border-brand-blue/30 text-brand-sky font-bold" id="modalMediaTag">МЕДИА</span>
+<a class="px-2.5 py-1 rounded bg-brand-blue/15 hover:bg-brand-blue text-brand-sky hover:text-white border border-brand-blue/30 text-xs font-semibold transition items-center gap-1 flex" href="#" id="modalMediaOpenBtn" rel="noopener noreferrer" target="_blank">
+<span class="">ОТКРЫТЬ ↗</span>
+</a>
+</div>
+</div>
+<!-- Image preview box -->
+<div class="hidden w-full max-h-64 rounded-xl overflow-hidden border border-[#232734] bg-black/40 flex items-center justify-center p-2 mt-1" id="modalMediaPreviewBox">
+<img alt="Медиа скриншот" class="max-h-60 rounded-lg object-contain border border-[#232734] hover:scale-105 transition-transform duration-300" id="modalMediaPreviewImg" src="">
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="p-4 sm:p-5 bg-[#0f131c]/95 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 shrink-0">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono text-slate-400">Статус:</span>
+<select class="bg-[#161b26] text-white text-xs border border-white/15 rounded-xl px-3 py-2 focus:outline-none cursor-pointer" id="modalStatusSelect">
+<option value="new">Новый / В очереди</option>
+<option value="progress">В работе</option>
+<option value="resolved">Решено</option>
+<option value="rejected">Закрыто / Отклонено</option>
+</select>
+</div>
+<div class="flex items-center gap-2 ml-auto">
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-300 text-xs font-medium transition cursor-pointer" id="modalDeleteBtn" type="button">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+<span class="hidden sm:inline">Удалить</span>
+</button>
+<button class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white text-xs font-semibold transition cursor-pointer" onclick="closeTicketDetails()" type="button">
+            Закрыть
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Application Logic -->
+<script>
+    const SUPABASE_URL = 'https://qhhydacgopeilnumuevi.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_TfKivMM0Bh8YtUECbC1_Vw_GJrKhKoR';
+    const STORAGE_KEY = 'cloudseasons_bug_reports_cache_v2';
+    const SESSION_KEY = 'cloudseasons_admin_session';
+
+    let supabaseClient = null;
+    try {
+      if (window.supabase && typeof window.supabase.createClient === 'function') {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        });
+      }
+    } catch (e) {
+      console.error('Failed to init Supabase client:', e);
+    }
+
+    let bugReports = [];
+    let currentCategory = 'all';
+    let currentStatus = 'all';
+    let currentSort = 'date_desc';
+    let currentSearch = '';
+    let selectedTicketIds = new Set();
+    let activeTicketId = null;
+    let currentUser = null;
+    let isLoggingOut = false;
+
+    function isImageUrl(url) {
+      if (!url || typeof url !== 'string') return false;
+      const clean = url.trim().toLowerCase();
+      if (/\.(png|jpe?g|webp|gif|svg|bmp)(\?.*)?$/i.test(clean)) return true;
+      if (clean.includes('cdn.discordapp.com') || clean.includes('media.discordapp.net')) return true;
+      if (clean.includes('imgur.com') || clean.includes('yapx.ru') || clean.includes('i.postimg.cc')) return true;
+      return false;
+    }
+
+    function normalizeTicket(item) {
+      if (!item) return null;
+      const rawCat = (item.category || '').toLowerCase().trim();
+      let category = 'other';
+
+      if (rawCat.includes('web') || rawCat.includes('сайт') || rawCat.includes('веб') || rawCat.includes('site') || rawCat.includes('browser')) {
+        category = 'web';
+      } else if (rawCat.includes('pack') || rawCat.includes('mod') || rawCat.includes('сбор') || rawCat.includes('баланс') || rawCat.includes('balan')) {
+        category = 'pack';
+      } else if (rawCat.includes('serv') || rawCat.includes('серв') || rawCat.includes('crash') || rawCat.includes('краш')) {
+        category = 'server';
+      } else if (rawCat.includes('vis') || rawCat.includes('виз') || rawCat.includes('текст') || rawCat.includes('graf') || rawCat.includes('граф')) {
+        category = 'visual';
+      } else {
+        category = 'other';
+      }
+
+      const rawStatus = (item.status || 'new').toLowerCase();
+      let status = 'new';
+      if (rawStatus.includes('prog') || rawStatus.includes('раб')) status = 'progress';
+      else if (rawStatus.includes('resolv') || rawStatus.includes('исправ') || rawStatus.includes('решен')) status = 'resolved';
+      else if (rawStatus.includes('reject') || rawStatus.includes('откл') || rawStatus.includes('закр') || rawStatus.includes('close')) status = 'rejected';
+
+      const author = item.player_name || item.author || 'Аноним';
+      const title = item.title || ('Обращение #' + (item.id || ''));
+      const desc = item.description !== undefined ? item.description : (item.desc || 'Описание не указано');
+      const priority = item.priority || 'medium';
+      const createdAt = item.created_at || item.timestamp || new Date().toISOString();
+      const id = String(item.id || 't_' + Math.random().toString(36).substring(2, 9));
+
+      const rawUrl = item.media_url || item.discord_tag || item.media || item.screenshot || item.url || null;
+      const rawUrlStr = rawUrl ? String(rawUrl).trim() : '';
+      const hasMedia = Boolean(rawUrlStr && rawUrlStr !== 'null' && rawUrlStr !== 'undefined');
+      const mediaUrl = hasMedia ? rawUrlStr : '';
+
+      return {
+        id,
+        title,
+        category,
+        status,
+        author,
+        desc,
+        priority,
+        created_at: createdAt,
+        hasMedia,
+        media_url: mediaUrl
+      };
+    }
+
+    function getLocalCache() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed.map(normalizeTicket).filter(Boolean);
+        }
+      } catch (e) {
+        console.warn('Local cache read error:', e);
+      }
+      return [];
+    }
+
+    function saveLocalCache(list) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      } catch (e) {
+        console.warn('Local cache write error:', e);
+      }
+    }
+
+    async function loadTicketsFromSupabase() {
+      let fetched = null;
+
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('bug_reports')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (!error && Array.isArray(data)) {
+            fetched = data;
+          }
+        } catch (err) {
+          console.warn('Supabase SDK exception:', err);
+        }
+      }
+
+      if (!fetched) {
+        try {
+          const resp = await fetch(`${SUPABASE_URL}/rest/v1/bug_reports?select=*&order=created_at.desc`, {
+            headers: {
+              'apikey': SUPABASE_ANON_KEY,
+              'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+            }
+          });
+          if (resp.ok) {
+            const data = await resp.json();
+            if (Array.isArray(data)) fetched = data;
+          }
+        } catch (err) {
+          console.warn('REST fallback error:', err);
+        }
+      }
+
+      if (fetched) {
+        bugReports = fetched.map(normalizeTicket).filter(Boolean);
+      } else {
+        bugReports = getLocalCache();
+      }
+
+      saveLocalCache(bugReports);
+      renderTickets();
+    }
+
+    function formatTime(isoOrStamp) {
+      if (!isoOrStamp) return 'Только что';
+      try {
+        const d = new Date(isoOrStamp);
+        if (isNaN(d.getTime())) return String(isoOrStamp);
+        const now = new Date();
+        const diffMs = now - d;
+        const diffMins = Math.floor(diffMs / 60000);
+        if (diffMins < 1) return 'Только что';
+        if (diffMins < 60) return `${diffMins} мин назад`;
+        const diffHours = Math.floor(diffMins / 60);
+        if (diffHours < 24) return `${diffHours} ч назад`;
+        return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      } catch (e) {
+        return 'Только что';
+      }
+    }
+
+    function isToday(isoOrStamp) {
+      if (!isoOrStamp) return false;
+      const d = new Date(isoOrStamp);
+      const now = new Date();
+      return d.toDateString() === now.toDateString();
+    }
+
+    function updateKPIs() {
+      const total = bugReports.length;
+      const newCount = bugReports.filter(r => r.status === 'new').length;
+      const progressCount = bugReports.filter(r => r.status === 'progress').length;
+      const resolvedCount = bugReports.filter(r => r.status === 'resolved').length;
+      const todayCount = bugReports.filter(r => isToday(r.created_at)).length;
+
+      const totalEl = document.getElementById('kpiTotal');
+      if (totalEl) totalEl.textContent = total;
+      const newEl = document.getElementById('kpiNew');
+      if (newEl) newEl.textContent = newCount;
+      const progEl = document.getElementById('kpiProgress');
+      if (progEl) progEl.textContent = progressCount;
+      const resEl = document.getElementById('kpiResolved');
+      if (resEl) resEl.textContent = resolvedCount;
+
+      const todayEl = document.getElementById('kpiTodayCount');
+      if (todayEl) {
+        todayEl.innerHTML = `<span class="material-symbols-outlined text-[14px]">north_east</span> +${todayCount} сегодня`;
+      }
+
+      const newStatEl = document.getElementById('kpiNewStatus');
+      if (newStatEl) newStatEl.textContent = newCount === 0 ? 'Очередь пуста' : `${newCount} в очереди`;
+      const progStatEl = document.getElementById('kpiProgressStatus');
+      if (progStatEl) progStatEl.textContent = `${progressCount} в работе`;
+      const resRateEl = document.getElementById('kpiResolvedRate');
+      if (resRateEl) resRateEl.textContent = total > 0 ? `${Math.round((resolvedCount / total) * 100)}% закрыто` : '0% закрыто';
+
+      const barTot = document.getElementById('barTotal');
+      if (barTot) barTot.style.width = total > 0 ? '100%' : '0%';
+      const barNew = document.getElementById('barNew');
+      if (barNew) barNew.style.width = total > 0 ? `${(newCount / total) * 100}%` : '0%';
+      const barProg = document.getElementById('barProgress');
+      if (barProg) barProg.style.width = total > 0 ? `${(progressCount / total) * 100}%` : '0%';
+      const barRes = document.getElementById('barResolved');
+      if (barRes) barRes.style.width = total > 0 ? `${(resolvedCount / total) * 100}%` : '0%';
+
+      const catAll = document.getElementById('countCatAll');
+      if (catAll) catAll.textContent = total;
+      const catCrash = document.getElementById('countCatCrash');
+      if (catCrash) catCrash.textContent = bugReports.filter(r => r.category === 'server').length;
+      const catWeb = document.getElementById('countCatWeb');
+      if (catWeb) catWeb.textContent = bugReports.filter(r => r.category === 'web').length;
+      const catPack = document.getElementById('countCatPack');
+      if (catPack) catPack.textContent = bugReports.filter(r => r.category === 'pack').length;
+      const catVis = document.getElementById('countCatVisual');
+      if (catVis) catVis.textContent = bugReports.filter(r => r.category === 'visual').length;
+      const catOther = document.getElementById('countCatOther');
+      if (catOther) catOther.textContent = bugReports.filter(r => r.category === 'other').length;
+    }
+
+    const CATEGORY_META = {
+      server: {
+        label: 'Сервер / Краш',
+        icon: 'terminal',
+        badgeBg: 'bg-rose-500/15 border-rose-500/30 text-rose-400',
+        iconBg: 'bg-gradient-to-br from-rose-500/20 to-red-600/30 border-rose-500/40 text-rose-400 glow-rose'
+      },
+      web: {
+        label: 'Веб-сайт',
+        icon: 'language',
+        badgeBg: 'bg-sky-500/15 border-sky-500/30 text-sky-400',
+        iconBg: 'bg-gradient-to-br from-sky-500/20 to-blue-600/30 border-sky-500/40 text-sky-400 glow-cyan'
+      },
+      pack: {
+        label: 'Сборка / Баланс',
+        icon: 'extension',
+        badgeBg: 'bg-purple-500/15 border-purple-500/30 text-purple-300',
+        iconBg: 'bg-gradient-to-br from-purple-500/20 to-indigo-600/30 border-purple-500/40 text-purple-300 glow-purple'
+      },
+      visual: {
+        label: 'Визуал',
+        icon: 'palette',
+        badgeBg: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300',
+        iconBg: 'bg-gradient-to-br from-emerald-500/20 to-teal-600/30 border-emerald-500/40 text-emerald-300 glow-emerald'
+      },
+      other: {
+        label: 'Другое',
+        icon: 'folder',
+        badgeBg: 'bg-slate-500/15 border-slate-500/30 text-slate-300',
+        iconBg: 'bg-gradient-to-br from-slate-500/20 to-gray-600/30 border-slate-500/40 text-slate-300 glow-blue'
+      }
+    };
+
+    function getStatusBadge(status) {
+      if (status === 'new') {
+        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+          Новый / В очереди
+        </span>`;
+      }
+      if (status === 'progress') {
+        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-sky/15 border border-brand-sky/30 text-brand-sky text-xs font-semibold">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-sky animate-ping"></span>
+          В разработке
+        </span>`;
+      }
+      if (status === 'resolved') {
+        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          Решено
+        </span>`;
+      }
+      return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-slate-400 text-xs font-semibold">
+        Закрыто
+      </span>`;
+    }
+
+    window.openTicketDetails = function(ticketId) {
+      const ticket = bugReports.find(t => String(t.id) === String(ticketId));
+      if (!ticket) return;
+      activeTicketId = String(ticket.id);
+
+      const catMeta = CATEGORY_META[ticket.category] || CATEGORY_META.other;
+
+      const authorEl = document.getElementById('modalAuthor');
+      if (authorEl) authorEl.textContent = ticket.author || 'Аноним';
+
+      const timeEl = document.getElementById('modalTime');
+      if (timeEl) timeEl.textContent = formatTime(ticket.created_at);
+
+      const titleEl = document.getElementById('modalTitle');
+      if (titleEl) titleEl.textContent = ticket.title || 'Без заголовка';
+
+      const descEl = document.getElementById('modalDesc');
+      if (descEl) descEl.textContent = ticket.desc || 'Описание отсутствует.';
+
+      const catBadge = document.getElementById('modalCategoryBadge');
+      if (catBadge) {
+        catBadge.textContent = catMeta.label;
+        catBadge.className = `px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider border shadow-sm ${catMeta.badgeBg}`;
+      }
+
+      const idBadge = document.getElementById('modalTicketBadgeId');
+      if (idBadge) {
+        idBadge.textContent = String(ticket.id).startsWith('#') ? ticket.id : '#' + ticket.id;
+      }
+
+      const mediaLink = document.getElementById('modalMediaLink');
+      const mediaTag = document.getElementById('modalMediaTag');
+      const mediaOpenBtn = document.getElementById('modalMediaOpenBtn');
+      const previewBox = document.getElementById('modalMediaPreviewBox');
+      const previewImg = document.getElementById('modalMediaPreviewImg');
+
+      if (ticket.hasMedia && ticket.media_url) {
+        const url = ticket.media_url;
+        if (mediaLink) {
+          mediaLink.href = url;
+          mediaLink.textContent = url;
+          mediaLink.classList.remove('pointer-events-none', 'text-slate-400');
+          mediaLink.classList.add('text-brand-sky', 'hover:underline');
+        }
+        if (mediaTag) {
+          mediaTag.textContent = 'МЕДИА';
+          mediaTag.className = 'text-[10px] font-mono uppercase px-2.5 py-1 rounded bg-brand-blue/15 border border-brand-blue/30 text-brand-sky font-bold';
+        }
+        if (mediaOpenBtn) {
+          mediaOpenBtn.href = url;
+          mediaOpenBtn.classList.remove('hidden');
+          mediaOpenBtn.classList.add('flex');
+        }
+        if (isImageUrl(url)) {
+          if (previewBox && previewImg) {
+            previewImg.src = url;
+            previewBox.classList.remove('hidden');
+          }
+        } else {
+          if (previewBox) previewBox.classList.add('hidden');
+        }
+      } else {
+        if (mediaLink) {
+          mediaLink.removeAttribute('href');
+          mediaLink.textContent = 'Не прикреплено';
+          mediaLink.classList.add('pointer-events-none', 'text-slate-400');
+          mediaLink.classList.remove('text-brand-sky', 'hover:underline');
+        }
+        if (mediaTag) {
+          mediaTag.textContent = 'ОТСУТСТВУЕТ';
+          mediaTag.className = 'text-[10px] font-mono uppercase px-2.5 py-1 rounded bg-slate-500/15 border border-slate-500/30 text-slate-400 font-bold';
+        }
+        if (mediaOpenBtn) {
+          mediaOpenBtn.classList.add('hidden');
+          mediaOpenBtn.classList.remove('flex');
+        }
+        if (previewBox) previewBox.classList.add('hidden');
+      }
+
+      const statusSelect = document.getElementById('modalStatusSelect');
+      if (statusSelect) statusSelect.value = ticket.status || 'new';
+
+      const modal = document.getElementById('ticketDetailModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
+    };
+
+    window.closeTicketDetails = function() {
+      const modal = document.getElementById('ticketDetailModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }
+      activeTicketId = null;
+    };
+
+    window.deleteSingleTicket = async function(ticketId) {
+      if (!confirm(`Вы действительно хотите удалить тикет #${ticketId}?`)) return;
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('bug_reports').delete().eq('id', ticketId);
+        } catch (e) {
+          console.warn('Supabase delete error:', e);
+        }
+      } else {
+        try {
+          await fetch(`${SUPABASE_URL}/rest/v1/bug_reports?id=eq.${ticketId}`, {
+            method: 'DELETE',
+            headers: {
+              'apikey': SUPABASE_ANON_KEY,
+              'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+            }
+          });
+        } catch (e) {
+          console.warn('REST delete error:', e);
+        }
+      }
+
+      bugReports = bugReports.filter(t => String(t.id) !== String(ticketId));
+      selectedTicketIds.delete(String(ticketId));
+      saveLocalCache(bugReports);
+      renderTickets();
+
+      if (activeTicketId && String(activeTicketId) === String(ticketId)) {
+        closeTicketDetails();
+      }
+    };
+
+    window.cycleTicketStatus = async function(ticketId) {
+      const ticket = bugReports.find(t => String(t.id) === String(ticketId));
+      if (!ticket) return;
+
+      if (ticket.status === 'new') ticket.status = 'progress';
+      else if (ticket.status === 'progress') ticket.status = 'resolved';
+      else ticket.status = 'new';
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('bug_reports').update({ status: ticket.status }).eq('id', ticketId);
+        } catch (e) {
+          console.warn('Supabase status update error:', e);
+        }
+      }
+
+      saveLocalCache(bugReports);
+      renderTickets();
+    };
+
+    function renderTickets() {
+      const container = document.getElementById('ticketsList');
+      const emptyState = document.getElementById('emptyState');
+      if (!container) return;
+
+      let filtered = bugReports.filter(t => {
+        const matchCat = currentCategory === 'all' || t.category === currentCategory;
+        const matchStatus = currentStatus === 'all' || t.status === currentStatus;
+        const q = currentSearch.toLowerCase().trim();
+        const catMeta = CATEGORY_META[t.category] || CATEGORY_META.other;
+        const matchSearch = !q ||
+          (t.title && t.title.toLowerCase().includes(q)) ||
+          (t.author && t.author.toLowerCase().includes(q)) ||
+          (String(t.id).toLowerCase().includes(q)) ||
+          (t.desc && t.desc.toLowerCase().includes(q)) ||
+          (catMeta.label && catMeta.label.toLowerCase().includes(q));
+        return matchCat && matchStatus && matchSearch;
+      });
+
+      if (currentSort === 'priority') {
+        const weight = { critical: 4, high: 3, medium: 2, low: 1 };
+        filtered.sort((a, b) => (weight[b.priority] || 0) - (weight[a.priority] || 0));
+      } else if (currentSort === 'date_asc') {
+        filtered.sort((a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
+      } else {
+        filtered.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+      }
+
+      updateKPIs();
+
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        if (emptyState) emptyState.classList.remove('hidden');
+        return;
+      }
+
+      if (emptyState) emptyState.classList.add('hidden');
+
+      let html = '';
+      filtered.forEach((ticket, idx) => {
+        const isSelected = selectedTicketIds.has(String(ticket.id));
+        const catMeta = CATEGORY_META[ticket.category] || CATEGORY_META.other;
+        const displayId = String(ticket.id).startsWith('t_') ? `#${idx + 1}` : (String(ticket.id).startsWith('#') ? ticket.id : `#${ticket.id}`);
+
+        const mediaTagHtml = ticket.hasMedia 
+          ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-medium border bg-brand-blue/10 border-brand-blue/20 text-brand-sky">
+              <span class="material-symbols-outlined text-[12px]">attachment</span>
+              Медиа
+            </span>` 
+          : '';
+
+        html += `
+          <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-3 transition-all duration-200 border ${isSelected ? 'border-brand-blue bg-brand-blue/10 shadow-md' : 'border-white/10'} hover:border-white/20 cursor-pointer" data-id="${ticket.id}" onclick="openTicketDetails('${ticket.id}')">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              
+              <!-- Info, Icon & Checkbox -->
+              <div class="flex items-start gap-3.5 min-w-0">
+                <div class="pt-2" onclick="event.stopPropagation()">
+                  <input 
+                    type="checkbox" 
+                    data-check-id="${ticket.id}" 
+                    class="ticket-check w-4 h-4 rounded cursor-pointer accent-[#4d8bff] bg-[#0a0e17] border-white/20" 
+                    ${isSelected ? 'checked' : ''}
+                  />
+                </div>
+
+                <!-- Category Glowing Icon -->
+                <div class="w-12 h-12 rounded-xl border flex items-center justify-center font-display shrink-0 ${catMeta.iconBg}">
+                  <span class="material-symbols-outlined text-[24px]">${catMeta.icon}</span>
+                </div>
+
+                <!-- Text Meta & Content -->
+                <div class="flex flex-col min-w-0">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="font-mono font-bold text-xs text-brand-sky bg-brand-blue/10 px-2 py-0.5 rounded border border-brand-blue/20">${displayId}</span>
+                    <span class="px-2 py-0.5 rounded text-[11px] font-mono font-bold uppercase tracking-wider border ${catMeta.badgeBg}">
+                      ${catMeta.label}
+                    </span>
+                    ${mediaTagHtml}
+                    <span class="text-slate-600 font-mono hidden sm:inline">•</span>
+                    <span class="text-xs text-slate-400 font-sans flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[14px] text-slate-500">schedule</span>
+                      ${formatTime(ticket.created_at)}
+                    </span>
+                  </div>
+
+                  <h4 class="font-display font-bold text-base text-white hover:text-brand-sky transition-colors cursor-pointer mt-1.5 line-clamp-1">
+                    ${ticket.title || 'Без названия'}
+                  </h4>
+
+                  <p class="text-xs text-slate-300 line-clamp-2 mt-1 font-sans leading-relaxed">
+                    ${ticket.desc || 'Описание не указано'}
+                  </p>
+
+                  <div class="flex flex-wrap items-center gap-3 mt-2 pt-2 border-t border-white/[0.05] text-xs">
+                    <span class="flex items-center gap-1.5 text-slate-300">
+                      <span class="material-symbols-outlined text-[15px] text-brand-sky">person</span>
+                      <span class="font-semibold text-white">${ticket.author || 'Аноним'}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Badges & Action Buttons -->
+              <div class="flex flex-wrap items-center gap-2 self-start lg:self-center shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-white/[0.06] w-full lg:w-auto justify-between lg:justify-end" onclick="event.stopPropagation()">
+                <div class="flex items-center gap-2">
+                  ${getStatusBadge(ticket.status)}
+                  <button type="button" onclick="event.stopPropagation(); cycleTicketStatus('${ticket.id}');" class="px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 hover:text-white border border-white/10 text-xs font-medium transition flex items-center gap-1 cursor-pointer" title="Сменить статус">
+                    <span class="material-symbols-outlined text-[15px] text-brand-sky">autorenew</span>
+                    <span class="hidden sm:inline">Сменить статус</span>
+                  </button>
+                </div>
+
+                <div class="flex items-center gap-1.5">
+                  <button type="button" onclick="event.stopPropagation(); openTicketDetails('${ticket.id}');" class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-brand-blue/15 hover:bg-brand-blue text-brand-sky hover:text-white border border-brand-blue/30 text-xs font-bold transition-all shadow-sm cursor-pointer">
+                    <span>Детали</span>
+                    <span class="material-symbols-outlined text-[15px]">chevron_right</span>
+                  </button>
+
+                  <button type="button" onclick="event.stopPropagation(); deleteSingleTicket('${ticket.id}');" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/25 border border-rose-500/20 text-rose-300 hover:text-rose-200 flex items-center justify-center transition cursor-pointer" title="Удалить тикет">
+                    <span class="material-symbols-outlined text-[16px]">delete</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+      updateBatchBar();
+      attachCheckListeners();
+    }
+
+    function updateBatchBar() {
+      const bar = document.getElementById('batchActionsBar');
+      const countEl = document.getElementById('selectedCount');
+      if (!bar || !countEl) return;
+      const count = selectedTicketIds.size;
+      if (count > 0) {
+        bar.classList.remove('hidden');
+        countEl.textContent = count;
+      } else {
+        bar.classList.add('hidden');
+      }
+    }
+
+    function attachCheckListeners() {
+      document.querySelectorAll('.ticket-check').forEach(chk => {
+        chk.addEventListener('change', (e) => {
+          e.stopPropagation();
+          const id = e.target.getAttribute('data-check-id');
+          if (e.target.checked) selectedTicketIds.add(String(id));
+          else selectedTicketIds.delete(String(id));
+          renderTickets();
+        });
+      });
+    }
+
+    function setupRealtimeListener() {
+      if (!supabaseClient) return;
+      try {
+        supabaseClient
+          .channel('public:bug_reports')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'bug_reports' }, () => {
+            loadTicketsFromSupabase();
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn('Realtime subscription notice:', e);
+      }
+    }
+
+    function showDashboard() {
+      const authScreen = document.getElementById('authScreen');
+      const dashboard = document.getElementById('adminDashboardContainer');
+      const topNav = document.getElementById('topAdminHeader');
+
+      if (authScreen) authScreen.classList.add('hidden');
+      if (dashboard) dashboard.classList.remove('hidden');
+      if (topNav) topNav.classList.remove('hidden');
+
+      loadTicketsFromSupabase();
+    }
+
+    function showLoginScreen() {
+      const authScreen = document.getElementById('authScreen');
+      const dashboard = document.getElementById('adminDashboardContainer');
+      const topNav = document.getElementById('topAdminHeader');
+
+      if (authScreen) authScreen.classList.remove('hidden');
+      if (dashboard) dashboard.classList.add('hidden');
+      if (topNav) topNav.classList.add('hidden');
+    }
+
+    function showAuthError(msg) {
+      const alert = document.getElementById('authErrorAlert');
+      const msgEl = document.getElementById('authErrorMsg');
+      if (alert && msgEl) {
+        msgEl.innerHTML = msg;
+        alert.classList.remove('hidden');
+      }
+    }
+
+    function hideAuthError() {
+      const alert = document.getElementById('authErrorAlert');
+      if (alert) alert.classList.add('hidden');
+    }
+
+    function setAuthLoading(loading) {
+      const submitBtn = document.getElementById('authSubmitBtn');
+      const icon = document.getElementById('authSubmitIcon');
+      const text = document.getElementById('authSubmitText');
+
+      if (loading) {
+        submitBtn.disabled = true;
+        if (icon) {
+          icon.textContent = 'progress_activity';
+          icon.classList.add('animate-spin-slow');
+        }
+        if (text) text.textContent = 'Проверка данных...';
+      } else {
+        submitBtn.disabled = false;
+        if (icon) {
+          icon.textContent = 'login';
+          icon.classList.remove('animate-spin-slow');
+        }
+        if (text) text.textContent = 'Войти в систему';
+      }
+    }
+
+    async function checkCurrentSession() {
+      if (supabaseClient) {
+        try {
+          const { data: { session } } = await supabaseClient.auth.getSession();
+          if (session && session.user) {
+            currentUser = session.user;
+            showDashboard();
+            return;
+          }
+        } catch (e) {
+          console.warn('Session check error:', e);
+        }
+      }
+
+      try {
+        const savedSession = localStorage.getItem(SESSION_KEY);
+        if (savedSession) {
+          const parsed = JSON.parse(savedSession);
+          if (parsed && (parsed.email || parsed.id)) {
+            currentUser = parsed;
+            showDashboard();
+            return;
+          }
+        }
+      } catch (e) {}
+
+      showLoginScreen();
+    }
+
+    async function handleLogin(email, password) {
+      hideAuthError();
+      setAuthLoading(true);
+
+      if (!email || !password) {
+        showAuthError('Пожалуйста, укажите email и пароль.');
+        setAuthLoading(false);
+        return;
+      }
+
+      try {
+        let authSuccess = false;
+        let authenticatedUser = null;
+
+        if (supabaseClient) {
+          const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email.trim(),
+            password: password
+          });
+
+          if (error) {
+            let friendlyMsg = error.message;
+            if (error.message.includes('Invalid login credentials')) {
+              friendlyMsg = 'Неверный email или пароль администратора. Проверьте правильность ввода.';
+            } else if (error.message.includes('Email not confirmed')) {
+              friendlyMsg = 'Email не подтвержден в панели Supabase. Подтвердите почту или включите Auto-confirm.';
+            } else if (error.message.includes('Too many requests') || error.status === 429) {
+              friendlyMsg = 'Слишком много попыток входа. Пожалуйста, подождите минуту.';
+            }
+            showAuthError(friendlyMsg);
+            setAuthLoading(false);
+            return;
+          }
+
+          if (data && data.session && data.user) {
+            authSuccess = true;
+            authenticatedUser = data.user;
+          }
+        } else {
+          showAuthError('Не удалось инициализировать подключение к Supabase. Проверьте интернет-соединение.');
+          setAuthLoading(false);
+          return;
+        }
+
+        if (authSuccess && authenticatedUser) {
+          currentUser = authenticatedUser;
+          localStorage.setItem(SESSION_KEY, JSON.stringify({ email: authenticatedUser.email, id: authenticatedUser.id }));
+          showDashboard();
+        }
+      } catch (err) {
+        console.error('Login exception:', err);
+        showAuthError('Ошибка подключения: ' + (err.message || 'Сбой сети или Supabase'));
+      } finally {
+        setAuthLoading(false);
+      }
+    }
+
+    async function handleLogout() {
+      if (isLoggingOut) return;
+      isLoggingOut = true;
+
+      const logoutBtn = document.getElementById('adminLogoutBtn');
+      const logoutIcon = document.getElementById('adminLogoutIcon');
+      const logoutText = document.getElementById('adminLogoutText');
+
+      if (logoutBtn) logoutBtn.disabled = true;
+      if (logoutIcon) {
+        logoutIcon.textContent = 'progress_activity';
+        logoutIcon.classList.add('animate-spin-slow');
+      }
+      if (logoutText) logoutText.textContent = 'Выход...';
+
+      try {
+        if (supabaseClient && supabaseClient.auth) {
+          const signOutPromise = supabaseClient.auth.signOut();
+          const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 1500));
+          await Promise.race([signOutPromise, timeoutPromise]);
+        }
+      } catch (e) {
+        console.warn('Supabase sign out error or timeout:', e);
+      } finally {
+        try {
+          localStorage.removeItem(SESSION_KEY);
+          sessionStorage.clear();
+        } catch (storageErr) {
+          console.warn('Storage clear error:', storageErr);
+        }
+
+        currentUser = null;
+        activeTicketId = null;
+        selectedTicketIds.clear();
+
+        const pwdInput = document.getElementById('loginPassword');
+        if (pwdInput) pwdInput.value = '';
+
+        if (typeof window.closeTicketDetails === 'function') {
+          window.closeTicketDetails();
+        }
+
+        showLoginScreen();
+
+        if (logoutBtn) logoutBtn.disabled = false;
+        if (logoutIcon) {
+          logoutIcon.textContent = 'logout';
+          logoutIcon.classList.remove('animate-spin-slow');
+        }
+        if (logoutText) logoutText.textContent = 'Выйти';
+
+        isLoggingOut = false;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkCurrentSession();
+      setupRealtimeListener();
+
+      if (supabaseClient) {
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+          if (event === 'SIGNED_IN' && session && session.user) {
+            currentUser = session.user;
+            showDashboard();
+          } else if (event === 'SIGNED_OUT') {
+            if (!isLoggingOut) {
+              handleLogout();
+            }
+          }
+        });
+      }
+
+      const loginForm = document.getElementById('adminLoginForm');
+      if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const email = document.getElementById('loginEmail').value;
+          const pwd = document.getElementById('loginPassword').value;
+          handleLogin(email, pwd);
+        });
+      }
+
+      const togglePwdBtn = document.getElementById('togglePwdBtn');
+      const loginPasswordInput = document.getElementById('loginPassword');
+      const togglePwdIcon = document.getElementById('togglePwdIcon');
+      if (togglePwdBtn && loginPasswordInput) {
+        togglePwdBtn.addEventListener('click', () => {
+          if (loginPasswordInput.type === 'password') {
+            loginPasswordInput.type = 'text';
+            if (togglePwdIcon) togglePwdIcon.textContent = 'visibility_off';
+          } else {
+            loginPasswordInput.type = 'password';
+            if (togglePwdIcon) togglePwdIcon.textContent = 'visibility';
+          }
+        });
+      }
+
+      const logoutBtn = document.getElementById('adminLogoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+      }
+
+      const searchInp = document.getElementById('searchInput');
+      if (searchInp) {
+        searchInp.addEventListener('input', (e) => {
+          currentSearch = e.target.value;
+          renderTickets();
+        });
+      }
+
+      const statusFlt = document.getElementById('statusFilter');
+      if (statusFlt) {
+        statusFlt.addEventListener('change', (e) => {
+          currentStatus = e.target.value;
+          renderTickets();
+        });
+      }
+
+      const sortFlt = document.getElementById('sortFilter');
+      if (sortFlt) {
+        sortFlt.addEventListener('change', (e) => {
+          currentSort = e.target.value;
+          renderTickets();
+        });
+      }
+
+      document.querySelectorAll('#categoryChips .cat-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          document.querySelectorAll('#categoryChips .cat-pill').forEach(p => {
+            p.classList.remove('bg-brand-blue', 'text-white', 'border-brand-blue', 'shadow-[0_0_12px_rgba(77,139,255,0.4)]', 'active');
+            p.classList.add('bg-white/[0.03]', 'text-slate-400', 'border-white/5');
+          });
+          pill.classList.remove('bg-white/[0.03]', 'text-slate-400', 'border-white/5');
+          pill.classList.add('bg-brand-blue', 'text-white', 'border-brand-blue', 'shadow-[0_0_12px_rgba(77,139,255,0.4)]', 'active');
+          currentCategory = pill.getAttribute('data-cat') || 'all';
+          renderTickets();
+        });
+      });
+
+      const clearBtn = document.getElementById('clearFiltersBtn');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          if (searchInp) searchInp.value = '';
+          currentSearch = '';
+          currentStatus = 'all';
+          currentSort = 'date_desc';
+          currentCategory = 'all';
+          if (statusFlt) statusFlt.value = 'all';
+          if (sortFlt) sortFlt.value = 'date_desc';
+          document.querySelectorAll('#categoryChips .cat-pill').forEach(p => {
+            p.classList.remove('bg-brand-blue', 'text-white', 'border-brand-blue', 'shadow-[0_0_12px_rgba(77,139,255,0.4)]', 'active');
+            p.classList.add('bg-white/[0.03]', 'text-slate-400', 'border-white/5');
+          });
+          const allPill = document.querySelector('#categoryChips [data-cat="all"]');
+          if (allPill) {
+            allPill.classList.remove('bg-white/[0.03]', 'text-slate-400', 'border-white/5');
+            allPill.classList.add('bg-brand-blue', 'text-white', 'border-brand-blue', 'shadow-[0_0_12px_rgba(77,139,255,0.4)]', 'active');
+          }
+          renderTickets();
+        });
+      }
+
+      const syncBtn = document.getElementById('syncDbBtn');
+      const syncIcon = document.getElementById('syncIcon');
+      if (syncBtn) {
+        syncBtn.addEventListener('click', () => {
+          if (syncIcon) syncIcon.classList.add('animate-spin-slow');
+          loadTicketsFromSupabase().finally(() => {
+            setTimeout(() => {
+              if (syncIcon) syncIcon.classList.remove('animate-spin-slow');
+            }, 600);
+          });
+        });
+      }
+
+      const emptyReload = document.getElementById('emptyReloadBtn');
+      if (emptyReload) {
+        emptyReload.addEventListener('click', () => {
+          loadTicketsFromSupabase();
+        });
+      }
+
+      const modalStatusSelect = document.getElementById('modalStatusSelect');
+      if (modalStatusSelect) {
+        modalStatusSelect.addEventListener('change', async (e) => {
+          if (!activeTicketId) return;
+          const ticket = bugReports.find(t => String(t.id) === String(activeTicketId));
+          if (ticket) {
+            ticket.status = e.target.value;
+            if (supabaseClient) {
+              try {
+                await supabaseClient.from('bug_reports').update({ status: ticket.status }).eq('id', ticket.id);
+              } catch (err) {
+                console.warn('Supabase status error:', err);
+              }
+            }
+            saveLocalCache(bugReports);
+            renderTickets();
+          }
+        });
+      }
+
+      const modalDeleteBtn = document.getElementById('modalDeleteBtn');
+      if (modalDeleteBtn) {
+        modalDeleteBtn.addEventListener('click', () => {
+          if (activeTicketId) {
+            window.deleteSingleTicket(activeTicketId);
+          }
+        });
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          window.closeTicketDetails();
+        }
+      });
+
+      const batchResBtn = document.getElementById('batchResolveBtn');
+      if (batchResBtn) {
+        batchResBtn.addEventListener('click', () => {
+          selectedTicketIds.forEach(id => {
+            const t = bugReports.find(x => String(x.id) === String(id));
+            if (t) {
+              t.status = 'resolved';
+              if (supabaseClient) {
+                supabaseClient.from('bug_reports').update({ status: 'resolved' }).eq('id', id).then(() => {});
+              }
+            }
+          });
+          saveLocalCache(bugReports);
+          selectedTicketIds.clear();
+          renderTickets();
+        });
+      }
+
+      const batchDelBtn = document.getElementById('batchDeleteBtn');
+      if (batchDelBtn) {
+        batchDelBtn.addEventListener('click', () => {
+          if (!confirm(`Удалить выбранные (${selectedTicketIds.size}) тикеты?`)) return;
+          selectedTicketIds.forEach(id => {
+            if (supabaseClient) {
+              supabaseClient.from('bug_reports').delete().eq('id', id).then(() => {});
+            }
+          });
+          bugReports = bugReports.filter(t => !selectedTicketIds.has(String(t.id)));
+          selectedTicketIds.clear();
+          saveLocalCache(bugReports);
+          renderTickets();
+        });
+      }
+
+      const exportBtn = document.getElementById('exportBtn');
+      if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+          const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(bugReports, null, 2));
+          const downloadAnchor = document.createElement('a');
+          downloadAnchor.setAttribute("href", dataStr);
+          downloadAnchor.setAttribute("download", `cloudseasons_tickets_${new Date().toISOString().slice(0, 10)}.json`);
+          document.body.appendChild(downloadAnchor);
+          downloadAnchor.click();
+          downloadAnchor.remove();
+        });
+      }
+    });
+  </script>
+
+
+
+
+<style id="custom-scrollbar-hide">html, body { scrollbar-width: none !important; -ms-overflow-style: none !important; } html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; background: transparent !important; } * { scrollbar-width: none !important; -ms-overflow-style: none !important; }</style>
+
+</body></html>
