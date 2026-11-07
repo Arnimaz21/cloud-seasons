@@ -87,4 +87,14 @@
         "</a>" +
       "</div>" +
     "</header>";
+
+  /* Предзагрузка внутренних страниц при наведении/касании — переходы быстрее */
+  if (window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports("speculationrules")) {
+    var rules = document.createElement("script");
+    rules.type = "speculationrules";
+    rules.textContent = JSON.stringify({
+      prefetch: [{ where: { href_matches: "/*" }, eagerness: "moderate" }]
+    });
+    document.head.appendChild(rules);
+  }
 })();

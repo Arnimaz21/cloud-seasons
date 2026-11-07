@@ -1,0 +1,53 @@
+/* Бесшовные переходы между страницами (Cross-document View Transitions).
+   Подключается в <head> на всех страницах сайта. */
+
+@view-transition {
+  navigation: auto;
+}
+
+/* Плавное перетекание старой страницы в новую */
+::view-transition-old(root) {
+  animation: cs-page-out .22s cubic-bezier(.4, 0, 1, 1) both;
+}
+
+::view-transition-new(root) {
+  animation: cs-page-in .32s cubic-bezier(.22, .61, .36, 1) both;
+}
+
+@keyframes cs-page-out {
+  to { opacity: 0; }
+}
+
+@keyframes cs-page-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Шапка не участвует в смене страницы — остаётся на месте */
+.cs-header {
+  view-transition-name: site-header;
+}
+
+/* Фолбэк для браузеров без View Transitions: мягкое появление страницы */
+@supports not (view-transition-name: none) {
+  body {
+    animation: cs-page-fallback-in .24s ease both;
+  }
+
+  @keyframes cs-page-fallback-in {
+    from { opacity: .001; }
+    to { opacity: 1; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+
+  body {
+    animation: none !important;
+  }
+}
