@@ -1,0 +1,10 @@
+{
+  "version": "0.1.0",
+  "publishedAt": "2026-11-13T13:26:04.344Z",
+  "notes": "Обновление лаунчера Cloud.Seasons.",
+  "dmg": {
+    "url": "https://files.cloudseasons.cc.cd/downloads/Cloud.Seasons-Launcher-0.1.0-arm64.dmg",
+    "size": 125882170,
+    "sha512": "Z69Qh/HJbkZkLZslLCKbpYrSCr/Snt16ghfNSYOY359pGDwRTW6equWqEJgz4T8shvrwCyPx7YX4UFDwXfyBHQ=="
+  }
+}

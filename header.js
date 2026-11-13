@@ -17,6 +17,7 @@
     { href: "/", label: "Главная", active: path === "/" },
     { href: "/modpacks/", label: "Сборки", active: path === "/modpacks" },
     { href: "/join/", label: "Как играть", active: path === "/join" },
+    { href: "/download/", label: "Скачать", active: path === "/download" },
     { href: "/rules/", label: "Правила", active: path === "/rules" },
     { href: "/bug-report/", label: "Сообщить о баге", active: path === "/bug-report" }
   ];
@@ -60,6 +61,9 @@
     ".cs-discord:hover{background:#5865F2;border-color:#5865F2}",
     ".cs-discord svg{width:16px;height:16px;fill:currentColor;transition:transform .2s}",
     ".cs-discord:hover svg{transform:scale(1.1)}",
+    "@media(max-width:1100px){.cs-nav a{padding:6px 10px;font-size:11px}.cs-discord{padding:8px 12px}}",
+    "@media(max-width:960px){.cs-nav{gap:0;padding:5px 8px}.cs-nav a{padding:5px 8px;font-size:10.5px}",
+    ".cs-brand-logo{width:34px;height:34px}.cs-wordmark{font-size:16px}.cs-sub{font-size:9px;letter-spacing:.14em}}",
     "@media(max-width:767.98px){.cs-nav{display:none}}",
     "@media(max-width:420px){.cs-header-inner{padding:0 14px}.cs-brand{gap:10px}",
     ".cs-wordmark{font-size:16px}.cs-sub{display:none}",
