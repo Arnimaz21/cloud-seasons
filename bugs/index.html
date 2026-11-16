@@ -100,7 +100,7 @@
 <header class="relative z-30 border-b border-white/[0.08] bg-[#0a0e17]/80 backdrop-blur-xl sticky top-0 hidden" id="topAdminHeader">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
 <!-- Brand & Link to Main Page -->
-<div class="flex items-center gap-6">
+<div class="flex items-center gap-3 sm:gap-6">
 <a class="flex items-center gap-3 group" href="../">
 <div class="relative w-10 h-10 rounded-xl overflow-hidden border border-white/10 group-hover:border-brand-blue/60 transition-all shadow-[0_0_15px_rgba(77,139,255,0.25)] shrink-0 bg-[#161b26]">
 <img alt="Cloud.Seasons Logo" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" src="/assets/logo.jpg">
@@ -108,7 +108,7 @@
 <div class="flex flex-col">
 <span class="font-display font-bold text-lg tracking-tight text-white flex items-center gap-2">
               Cloud.Seasons
-              <span class="text-[10px] uppercase font-mono tracking-widest px-2 py-0.5 rounded bg-brand-blue/20 text-brand-sky border border-brand-blue/30 font-bold leading-tight">Admin</span>
+              <span class="hidden sm:inline text-[10px] uppercase font-mono tracking-widest px-2 py-0.5 rounded bg-brand-blue/20 text-brand-sky border border-brand-blue/30 font-bold leading-tight">Admin</span>
 </span>
 </div>
 </a>
@@ -208,6 +208,20 @@
 </button>
 </div>
 </div>
+<!-- Dashboard View Tabs -->
+<div class="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-white/[0.03] border border-white/10 w-fit" id="dashboardTabs">
+<button aria-pressed="true" class="view-tab flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer bg-brand-blue text-white border border-brand-blue/40 shadow-[0_0_16px_rgba(77,139,255,0.25)]" data-view="tickets" id="tabTicketsBtn" type="button">
+<span class="material-symbols-outlined text-[16px]">bug_report</span>
+<span>Тикеты</span>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-white/15" id="tabTicketsCount">0</span>
+</button>
+<button aria-pressed="false" class="view-tab flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer bg-transparent text-slate-400 border border-transparent hover:text-white hover:bg-white/[0.05]" data-view="team" id="tabTeamBtn" type="button">
+<span class="material-symbols-outlined text-[16px]">group_add</span>
+<span>Заявки в команду</span>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-white/10" id="tabTeamCount">0</span>
+</button>
+</div>
+<div class="flex flex-col gap-8" id="ticketsView">
 <!-- 4 Glassmorphism KPI Stat Cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 <!-- Total Tickets Card -->
@@ -388,6 +402,30 @@
 </button>
 </div>
 </div>
+</div>
+<!-- Team Applications View -->
+<div class="hidden flex-col gap-5" id="teamView">
+<div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 border border-white/10 shadow-xl">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px] pointer-events-none">search</span>
+<input class="w-full bg-[#0a0e17]/80 text-white placeholder-slate-500 text-sm pl-11 pr-4 py-2.5 rounded-xl border border-white/10 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 focus:outline-none transition-all shadow-inner" id="teamSearchInput" placeholder="Поиск по имени, Discord, роли или опыту..." type="text">
+</div>
+<div class="flex items-center gap-2.5">
+<button class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 border border-white/10 transition-all text-xs font-medium cursor-pointer shadow-sm" id="teamReloadBtn" title="Обновить список заявок" type="button">
+<span class="material-symbols-outlined text-[18px] text-brand-sky" id="teamReloadIcon">sync</span>
+<span>Обновить</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-3" id="applicationsList"></div>
+<div class="glass-card rounded-2xl p-10 sm:p-16 flex-col items-center justify-center text-center relative overflow-hidden border border-white/10 shadow-xl hidden" id="applicationsEmpty">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-tr from-brand-blue/20 via-brand-sky/15 to-transparent border border-brand-blue/30 flex items-center justify-center text-brand-sky shadow-[0_0_30px_rgba(77,139,255,0.2)] mb-5 relative">
+<span class="material-symbols-outlined text-[42px] sm:text-[48px]">group_add</span>
+</div>
+<h3 class="font-display text-2xl font-bold text-white tracking-tight" id="applicationsEmptyTitle">Заявок пока нет</h3>
+<p class="text-slate-400 text-sm max-w-xl mt-2 leading-relaxed" id="applicationsEmptyText">Когда кто-то отправит заявку через страницу «В команду», она появится здесь.</p>
+</div>
+</div>
 </main>
 <!-- D. Ticket Details Modal Dialog -->
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#0a0e17]/85 backdrop-blur-md transition-opacity duration-200 hidden" id="ticketDetailModal" onclick="if(event.target === this) closeTicketDetails();">
@@ -544,6 +582,13 @@
     let currentUser = null;
     let isLoggingOut = false;
 
+    let teamApplications = [];
+    let currentView = 'tickets';
+    let teamSearch = '';
+    let teamLoadError = '';
+    let teamLoadedOnce = false;
+    let teamLoading = false;
+
     function isImageUrl(url) {
       if (!url || typeof url !== 'string') return false;
       const clean = url.trim().toLowerCase();
@@ -686,6 +731,192 @@
       }
     }
 
+    function escapeHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function ageLabel(age) {
+      const n = Math.max(0, Number(age) || 0);
+      const mod10 = n % 10;
+      const mod100 = n % 100;
+      if (mod100 >= 11 && mod100 <= 14) return n + ' лет';
+      if (mod10 === 1) return n + ' год';
+      if (mod10 >= 2 && mod10 <= 4) return n + ' года';
+      return n + ' лет';
+    }
+
+    function applicationContactButton(label, value) {
+      if (!value) return '';
+      return `<button type="button" data-copy="${escapeHtml(value)}" class="copy-application flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-[11px] text-slate-300 hover:text-white transition-all cursor-pointer" title="Скопировать ${escapeHtml(label)}">
+<span class="material-symbols-outlined text-[15px]">content_copy</span>
+<span class="copy-label max-w-[190px] truncate">${escapeHtml(label)}: ${escapeHtml(value)}</span>
+</button>`;
+    }
+
+    function applicationCard(app) {
+      const roles = String(app.roles || '')
+        .split(',')
+        .map((role) => role.trim())
+        .filter((role) => role && role !== 'Свой вариант');
+      const customRole = app.custom_role ? String(app.custom_role).trim() : '';
+      const roleChips = roles
+        .map((role) => `<span class="px-2 py-0.5 rounded-md bg-brand-blue/10 border border-brand-blue/20 text-brand-sky text-[11px] font-medium">${escapeHtml(role)}</span>`)
+        .join('');
+      const contacts = [
+        applicationContactButton('Discord', app.discord),
+        applicationContactButton('Telegram', app.telegram)
+      ].join('');
+      const subtitle = [
+        app.age ? ageLabel(app.age) : '',
+        app.timezone ? escapeHtml(app.timezone) : '',
+        formatTime(app.created_at)
+      ].filter(Boolean).join(' · ');
+
+      return `<article class="glass-card rounded-2xl border border-white/10 p-5 flex flex-col gap-4">
+<div class="flex flex-wrap items-start justify-between gap-3">
+<div class="flex items-start gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-brand-blue/15 border border-brand-blue/30 flex items-center justify-center text-brand-sky shrink-0">
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+<div class="min-w-0">
+<div class="flex flex-wrap items-center gap-2">
+<h3 class="font-display text-lg font-bold text-white truncate">${escapeHtml(app.name || 'Без имени')}</h3>
+<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">Новая</span>
+</div>
+<p class="text-xs text-slate-400 mt-0.5">${subtitle}</p>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-2">${contacts}</div>
+</div>
+<div class="flex flex-wrap items-center gap-1.5">${roleChips || (customRole ? '' : '<span class="text-xs text-slate-500">Роль не указана</span>')}${customRole ? `<span class="px-2 py-0.5 rounded-md bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[11px] font-medium">${escapeHtml(customRole)}</span>` : ''}</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+<div class="rounded-xl bg-white/[0.03] border border-white/5 p-3">
+<div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Опыт в Minecraft</div>
+<div class="text-sm text-white font-semibold mt-1">${escapeHtml(app.minecraft_years || '—')}</div>
+</div>
+<div class="rounded-xl bg-white/[0.03] border border-white/5 p-3">
+<div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Время на проект</div>
+<div class="text-sm text-white font-semibold mt-1">${escapeHtml(app.weekly_hours || '—')}</div>
+</div>
+<div class="rounded-xl bg-white/[0.03] border border-white/5 p-3">
+<div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Часовой пояс</div>
+<div class="text-sm text-white font-semibold mt-1">${escapeHtml(app.timezone || '—')}</div>
+</div>
+</div>
+<div class="rounded-xl bg-white/[0.02] border border-white/5 p-3.5">
+<div class="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1.5">Почему хочет помочь</div>
+<p class="text-sm text-slate-300 leading-relaxed whitespace-pre-line">${escapeHtml(app.motivation || 'Не указано')}</p>
+</div>
+</article>`;
+    }
+
+    function renderApplications() {
+      const list = document.getElementById('applicationsList');
+      const empty = document.getElementById('applicationsEmpty');
+      const titleEl = document.getElementById('applicationsEmptyTitle');
+      const textEl = document.getElementById('applicationsEmptyText');
+      const countEl = document.getElementById('tabTeamCount');
+      if (countEl) countEl.textContent = teamApplications.length;
+      if (!list) return;
+
+      const query = teamSearch.trim().toLowerCase();
+      const filtered = !query ? teamApplications : teamApplications.filter((app) => {
+        return [app.name, app.discord, app.telegram, app.roles, app.custom_role, app.motivation, app.timezone, app.minecraft_years]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+          .includes(query);
+      });
+
+      list.innerHTML = filtered.map(applicationCard).join('');
+
+      if (empty) {
+        const visible = filtered.length === 0;
+        empty.classList.toggle('hidden', !visible);
+        empty.classList.toggle('flex', visible);
+        if (visible && titleEl && textEl) {
+          if (teamLoadError) {
+            titleEl.textContent = 'Не удалось загрузить заявки';
+            textEl.textContent = teamLoadError;
+            textEl.className = 'text-rose-300 text-sm max-w-xl mt-2 leading-relaxed';
+          } else if (query) {
+            titleEl.textContent = 'Ничего не найдено';
+            textEl.textContent = 'Попробуйте изменить поисковый запрос.';
+            textEl.className = 'text-slate-400 text-sm max-w-xl mt-2 leading-relaxed';
+          } else {
+            titleEl.textContent = 'Заявок пока нет';
+            textEl.textContent = 'Когда кто-то отправит заявку через страницу «В команду», она появится здесь.';
+            textEl.className = 'text-slate-400 text-sm max-w-xl mt-2 leading-relaxed';
+          }
+        }
+      }
+    }
+
+    async function loadTeamApplications() {
+      if (teamLoading) return;
+      teamLoading = true;
+      const icon = document.getElementById('teamReloadIcon');
+      if (icon) icon.classList.add('animate-spin-slow');
+      teamLoadError = '';
+
+      try {
+        if (!supabaseClient) throw new Error('Supabase-клиент не инициализирован.');
+        const { data: sessionData } = await supabaseClient.auth.getSession();
+        if (!sessionData || !sessionData.session || !sessionData.session.user) {
+          throw new Error('Нет активной сессии администратора. Выйдите и войдите заново, чтобы увидеть заявки.');
+        }
+        const { data, error } = await supabaseClient
+          .from('team_applications')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        teamApplications = Array.isArray(data) ? data : [];
+        teamLoadedOnce = true;
+      } catch (err) {
+        console.error('Team applications load error:', err);
+        teamApplications = [];
+        const baseMessage = err && err.message ? err.message : 'Неизвестная ошибка';
+        teamLoadError = /сессии/i.test(baseMessage) ? baseMessage : 'Не удалось загрузить заявки: ' + baseMessage;
+      } finally {
+        teamLoading = false;
+        renderApplications();
+        setTimeout(() => {
+          if (icon) icon.classList.remove('animate-spin-slow');
+        }, 500);
+      }
+    }
+
+    function setDashboardView(view) {
+      currentView = view === 'team' ? 'team' : 'tickets';
+      const isTeam = currentView === 'team';
+      const ticketsView = document.getElementById('ticketsView');
+      const teamView = document.getElementById('teamView');
+
+      if (ticketsView) ticketsView.classList.toggle('hidden', isTeam);
+      if (teamView) {
+        teamView.classList.toggle('hidden', !isTeam);
+        teamView.classList.toggle('flex', isTeam);
+      }
+
+      const activeClasses = ['bg-brand-blue', 'text-white', 'border-brand-blue/40', 'shadow-[0_0_16px_rgba(77,139,255,0.25)]'];
+      const inactiveClasses = ['bg-transparent', 'text-slate-400', 'border-transparent'];
+      [['tabTicketsBtn', !isTeam], ['tabTeamBtn', isTeam]].forEach(([id, isActive]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.remove(...(isActive ? inactiveClasses : activeClasses));
+        el.classList.add(...(isActive ? activeClasses : inactiveClasses));
+        el.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+
+      if (isTeam && !teamLoadedOnce) loadTeamApplications();
+    }
+
     function isToday(isoOrStamp) {
       if (!isoOrStamp) return false;
       const d = new Date(isoOrStamp);
@@ -702,6 +933,8 @@
 
       const totalEl = document.getElementById('kpiTotal');
       if (totalEl) totalEl.textContent = total;
+      const tabTicketsCount = document.getElementById('tabTicketsCount');
+      if (tabTicketsCount) tabTicketsCount.textContent = total;
       const newEl = document.getElementById('kpiNew');
       if (newEl) newEl.textContent = newCount;
       const progEl = document.getElementById('kpiProgress');
@@ -1121,6 +1354,12 @@
             loadTicketsFromSupabase();
           })
           .subscribe();
+        supabaseClient
+          .channel('public:team_applications')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'team_applications' }, () => {
+            loadTeamApplications();
+          })
+          .subscribe();
       } catch (e) {
         console.warn('Realtime subscription notice:', e);
       }
@@ -1136,6 +1375,8 @@
       if (topNav) topNav.classList.remove('hidden');
 
       loadTicketsFromSupabase();
+      loadTeamApplications();
+      setDashboardView(currentView);
     }
 
     function showLoginScreen() {
@@ -1304,6 +1545,17 @@
         currentUser = null;
         activeTicketId = null;
         selectedTicketIds.clear();
+        teamApplications = [];
+        teamLoadedOnce = false;
+        teamLoadError = '';
+        teamSearch = '';
+        const teamSearchInput = document.getElementById('teamSearchInput');
+        if (teamSearchInput) teamSearchInput.value = '';
+        const applicationsList = document.getElementById('applicationsList');
+        if (applicationsList) applicationsList.innerHTML = '';
+        const tabTeamCount = document.getElementById('tabTeamCount');
+        if (tabTeamCount) tabTeamCount.textContent = '0';
+        setDashboardView('tickets');
 
         const pwdInput = document.getElementById('loginPassword');
         if (pwdInput) pwdInput.value = '';
@@ -1432,16 +1684,83 @@
         });
       }
 
+      const tabTicketsBtn = document.getElementById('tabTicketsBtn');
+      if (tabTicketsBtn) {
+        tabTicketsBtn.addEventListener('click', () => setDashboardView('tickets'));
+      }
+
+      const tabTeamBtn = document.getElementById('tabTeamBtn');
+      if (tabTeamBtn) {
+        tabTeamBtn.addEventListener('click', () => setDashboardView('team'));
+      }
+
+      const teamSearchInp = document.getElementById('teamSearchInput');
+      if (teamSearchInp) {
+        teamSearchInp.addEventListener('input', (e) => {
+          teamSearch = e.target.value;
+          renderApplications();
+        });
+      }
+
+      const teamReloadBtn = document.getElementById('teamReloadBtn');
+      if (teamReloadBtn) {
+        teamReloadBtn.addEventListener('click', () => {
+          loadTeamApplications();
+        });
+      }
+
+      document.addEventListener('click', async (e) => {
+        const copyBtn = e.target.closest('.copy-application');
+        if (!copyBtn) return;
+        const value = copyBtn.getAttribute('data-copy') || '';
+        if (!value) return;
+        const label = copyBtn.querySelector('.copy-label');
+        const originalText = label ? label.textContent : '';
+        try {
+          let copied = false;
+          if (navigator.clipboard && window.isSecureContext) {
+            try {
+              await navigator.clipboard.writeText(value);
+              copied = true;
+            } catch (clipErr) {
+              console.warn('Clipboard API failed, using fallback:', clipErr);
+            }
+          }
+          if (!copied) {
+            const temp = document.createElement('textarea');
+            temp.value = value;
+            temp.setAttribute('readonly', '');
+            temp.style.position = 'fixed';
+            temp.style.opacity = '0';
+            document.body.appendChild(temp);
+            temp.select();
+            copied = document.execCommand('copy');
+            temp.remove();
+            if (!copied) throw new Error('copy command rejected');
+          }
+          if (label) {
+            label.textContent = 'Скопировано';
+            setTimeout(() => { label.textContent = originalText; }, 1400);
+          }
+        } catch (err) {
+          console.warn('Clipboard error:', err);
+          if (label) {
+            label.textContent = 'Не удалось скопировать';
+            setTimeout(() => { label.textContent = originalText; }, 1800);
+          }
+        }
+      });
+
       const syncBtn = document.getElementById('syncDbBtn');
       const syncIcon = document.getElementById('syncIcon');
       if (syncBtn) {
         syncBtn.addEventListener('click', () => {
           if (syncIcon) syncIcon.classList.add('animate-spin-slow');
-          loadTicketsFromSupabase().finally(() => {
-            setTimeout(() => {
-              if (syncIcon) syncIcon.classList.remove('animate-spin-slow');
-            }, 600);
-          });
+          loadTicketsFromSupabase();
+          loadTeamApplications();
+          setTimeout(() => {
+            if (syncIcon) syncIcon.classList.remove('animate-spin-slow');
+          }, 600);
         });
       }
 
