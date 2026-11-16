@@ -98,7 +98,7 @@
 </div>
 <!-- A. Top Admin Header (Active when authenticated) -->
 <header class="relative z-30 border-b border-white/[0.08] bg-[#0a0e17]/80 backdrop-blur-xl sticky top-0 hidden" id="topAdminHeader">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+<div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4">
 <!-- Brand & Link to Main Page -->
 <div class="flex items-center gap-3 sm:gap-6">
 <a class="flex items-center gap-3 group" href="../">
@@ -405,7 +405,8 @@
 </div>
 <!-- Team Applications View -->
 <div class="hidden flex-col gap-5" id="teamView">
-<div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 border border-white/10 shadow-xl">
+<div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-3 border border-white/10 shadow-xl">
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
 <div class="relative flex-1">
 <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px] pointer-events-none">search</span>
 <input class="w-full bg-[#0a0e17]/80 text-white placeholder-slate-500 text-sm pl-11 pr-4 py-2.5 rounded-xl border border-white/10 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/30 focus:outline-none transition-all shadow-inner" id="teamSearchInput" placeholder="Поиск по имени, Discord, роли или опыту..." type="text">
@@ -414,6 +415,35 @@
 <button class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 border border-white/10 transition-all text-xs font-medium cursor-pointer shadow-sm" id="teamReloadBtn" title="Обновить список заявок" type="button">
 <span class="material-symbols-outlined text-[18px] text-brand-sky" id="teamReloadIcon">sync</span>
 <span>Обновить</span>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-1.5 pt-3 border-t border-white/[0.06]" id="applicationStatusFilters">
+<button aria-pressed="true" class="app-filter flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border" data-app-filter="pending" type="button">
+<span>На рассмотрении</span>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-white/10" id="countAppsPending">0</span>
+</button>
+<button aria-pressed="false" class="app-filter flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border" data-app-filter="reviewed" type="button">
+<span>Рассмотрено</span>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-white/10" id="countAppsReviewed">0</span>
+</button>
+<button aria-pressed="false" class="app-filter flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer border" data-app-filter="all" type="button">
+<span>Все</span>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-white/10" id="countAppsAll">0</span>
+</button>
+</div>
+<div class="hidden flex-wrap items-center gap-1.5 pl-0.5" id="applicationReviewedFilters">
+<span class="text-[10px] font-mono uppercase tracking-wider text-slate-500 mr-1">Рассмотрено:</span>
+<button aria-pressed="true" class="app-review-filter px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all cursor-pointer border" data-app-review="all" type="button">
+Все рассмотренные
+</button>
+<button aria-pressed="false" class="app-review-filter flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all cursor-pointer border" data-app-review="accepted" type="button">
+Принято
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-white/10" id="countAppsAccepted">0</span>
+</button>
+<button aria-pressed="false" class="app-review-filter flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all cursor-pointer border" data-app-review="rejected" type="button">
+Отказано
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-white/10" id="countAppsRejected">0</span>
 </button>
 </div>
 </div>
@@ -588,6 +618,9 @@
     let teamLoadError = '';
     let teamLoadedOnce = false;
     let teamLoading = false;
+    let applicationFilter = 'pending';
+    let applicationReviewFilter = 'all';
+    let applicationActionPending = new Set();
 
     function isImageUrl(url) {
       if (!url || typeof url !== 'string') return false;
@@ -758,7 +791,60 @@
 </button>`;
     }
 
+    function getApplicationStatus(app) {
+      const value = String((app && app.status) || '').toLowerCase();
+      if (value === 'accepted' || value === 'approved') return 'accepted';
+      if (value === 'rejected' || value === 'declined') return 'rejected';
+      return 'pending';
+    }
+
+    function applicationStatusMeta(status) {
+      if (status === 'accepted') {
+        return { label: 'Принято', badge: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300' };
+      }
+      if (status === 'rejected') {
+        return { label: 'Отказано', badge: 'bg-rose-500/10 border-rose-500/20 text-rose-300' };
+      }
+      return { label: 'На рассмотрении', badge: 'bg-amber-500/10 border-amber-500/20 text-amber-300' };
+    }
+
+    function applicationStatusBadge(status) {
+      const meta = applicationStatusMeta(status);
+      return `<span class="text-[10px] font-mono px-2 py-0.5 rounded border ${meta.badge}">${meta.label}</span>`;
+    }
+
+    function applicationActionButton(id, action, label, icon, className) {
+      return `<button type="button" data-app-action="${action}" data-app-id="${escapeHtml(String(id))}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[11px] font-semibold transition-all cursor-pointer disabled:opacity-50 disabled:cursor-wait ${className}">
+<span class="material-symbols-outlined text-[15px]">${icon}</span>
+<span>${label}</span>
+</button>`;
+    }
+
+    function showAdminToast(message, type) {
+      let host = document.getElementById('adminToastHost');
+      if (!host) {
+        host = document.createElement('div');
+        host.id = 'adminToastHost';
+        host.className = 'fixed bottom-5 right-5 z-[120] flex flex-col gap-2 max-w-sm';
+        document.body.appendChild(host);
+      }
+      const toast = document.createElement('div');
+      toast.className = 'px-4 py-3 rounded-xl border shadow-2xl text-xs font-medium backdrop-blur-xl ' + (type === 'error'
+        ? 'bg-rose-500/15 border-rose-500/30 text-rose-200'
+        : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-200');
+      toast.textContent = message;
+      host.appendChild(toast);
+      setTimeout(() => {
+        toast.style.transition = 'opacity .25s ease, transform .25s ease';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(6px)';
+        setTimeout(() => toast.remove(), 260);
+      }, 3200);
+    }
+
     function applicationCard(app) {
+      const status = getApplicationStatus(app);
+      const meta = applicationStatusMeta(status);
       const roles = String(app.roles || '')
         .split(',')
         .map((role) => role.trim())
@@ -777,6 +863,18 @@
         formatTime(app.created_at)
       ].filter(Boolean).join(' · ');
 
+      const actionButtons = [];
+      if (status !== 'accepted') {
+        actionButtons.push(applicationActionButton(app.id, 'accepted', 'Принять', 'check_circle', 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border-emerald-500/25'));
+      }
+      if (status !== 'rejected') {
+        actionButtons.push(applicationActionButton(app.id, 'rejected', 'Отказать', 'close', 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border-rose-500/25'));
+      }
+      if (status !== 'pending') {
+        actionButtons.push(applicationActionButton(app.id, 'pending', 'Вернуть', 'schedule', 'bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 border-white/10'));
+      }
+      actionButtons.push(applicationActionButton(app.id, 'delete', 'Удалить', 'delete', 'bg-rose-500/5 hover:bg-rose-500/15 text-rose-300/80 border-rose-500/20'));
+
       return `<article class="glass-card rounded-2xl border border-white/10 p-5 flex flex-col gap-4">
 <div class="flex flex-wrap items-start justify-between gap-3">
 <div class="flex items-start gap-3 min-w-0">
@@ -786,7 +884,7 @@
 <div class="min-w-0">
 <div class="flex flex-wrap items-center gap-2">
 <h3 class="font-display text-lg font-bold text-white truncate">${escapeHtml(app.name || 'Без имени')}</h3>
-<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">Новая</span>
+${applicationStatusBadge(status)}
 </div>
 <p class="text-xs text-slate-400 mt-0.5">${subtitle}</p>
 </div>
@@ -812,7 +910,37 @@
 <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1.5">Почему хочет помочь</div>
 <p class="text-sm text-slate-300 leading-relaxed whitespace-pre-line">${escapeHtml(app.motivation || 'Не указано')}</p>
 </div>
+<div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-white/[0.06]">
+<span class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Статус: <span class="${status === 'accepted' ? 'text-emerald-300' : status === 'rejected' ? 'text-rose-300' : 'text-amber-300'}">${meta.label}</span></span>
+<div class="flex flex-wrap items-center gap-2">${actionButtons.join('')}</div>
+</div>
 </article>`;
+    }
+
+    function syncApplicationFilterButtons() {
+      const activeClasses = ['bg-brand-blue', 'text-white', 'border-brand-blue/40', 'shadow-[0_0_16px_rgba(77,139,255,0.2)]'];
+      const inactiveClasses = ['bg-white/[0.03]', 'text-slate-400', 'border-white/10', 'hover:text-white', 'hover:bg-white/[0.06]'];
+
+      document.querySelectorAll('[data-app-filter]').forEach((btn) => {
+        const on = btn.getAttribute('data-app-filter') === applicationFilter;
+        btn.classList.remove(...(on ? inactiveClasses : activeClasses));
+        btn.classList.add(...(on ? activeClasses : inactiveClasses));
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+
+      document.querySelectorAll('[data-app-review]').forEach((btn) => {
+        const on = btn.getAttribute('data-app-review') === applicationReviewFilter;
+        btn.classList.remove(...(on ? inactiveClasses : activeClasses));
+        btn.classList.add(...(on ? activeClasses : inactiveClasses));
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+
+      const reviewRow = document.getElementById('applicationReviewedFilters');
+      if (reviewRow) {
+        const show = applicationFilter === 'reviewed';
+        reviewRow.classList.toggle('hidden', !show);
+        reviewRow.classList.toggle('flex', show);
+      }
     }
 
     function renderApplications() {
@@ -822,15 +950,50 @@
       const textEl = document.getElementById('applicationsEmptyText');
       const countEl = document.getElementById('tabTeamCount');
       if (countEl) countEl.textContent = teamApplications.length;
+
+      const counts = { pending: 0, accepted: 0, rejected: 0 };
+      teamApplications.forEach((app) => {
+        counts[getApplicationStatus(app)] += 1;
+      });
+      const reviewedCount = counts.accepted + counts.rejected;
+      const setCount = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+      setCount('countAppsPending', counts.pending);
+      setCount('countAppsReviewed', reviewedCount);
+      setCount('countAppsAll', teamApplications.length);
+      setCount('countAppsAccepted', counts.accepted);
+      setCount('countAppsRejected', counts.rejected);
+
+      syncApplicationFilterButtons();
       if (!list) return;
 
       const query = teamSearch.trim().toLowerCase();
-      const filtered = !query ? teamApplications : teamApplications.filter((app) => {
+      const filtered = teamApplications.filter((app) => {
+        const status = getApplicationStatus(app);
+        if (applicationFilter === 'pending' && status !== 'pending') return false;
+        if (applicationFilter === 'reviewed') {
+          if (status === 'pending') return false;
+          if (applicationReviewFilter !== 'all' && status !== applicationReviewFilter) return false;
+        }
+        if (!query) return true;
         return [app.name, app.discord, app.telegram, app.roles, app.custom_role, app.motivation, app.timezone, app.minecraft_years]
           .filter(Boolean)
           .join(' ')
           .toLowerCase()
           .includes(query);
+      });
+
+      const order = { pending: 0, accepted: 1, rejected: 2 };
+      filtered.sort((a, b) => {
+        if (applicationFilter === 'all') {
+          const diff = order[getApplicationStatus(a)] - order[getApplicationStatus(b)];
+          if (diff !== 0) return diff;
+        }
+        const timeA = new Date(a.created_at || 0).getTime() || 0;
+        const timeB = new Date(b.created_at || 0).getTime() || 0;
+        return timeB - timeA;
       });
 
       list.innerHTML = filtered.map(applicationCard).join('');
@@ -848,12 +1011,104 @@
             titleEl.textContent = 'Ничего не найдено';
             textEl.textContent = 'Попробуйте изменить поисковый запрос.';
             textEl.className = 'text-slate-400 text-sm max-w-xl mt-2 leading-relaxed';
+          } else if (applicationFilter === 'pending' && teamApplications.length > 0) {
+            titleEl.textContent = 'На рассмотрении ничего нет';
+            textEl.textContent = 'Все заявки уже рассмотрены. Принятые и отклонённые — во вкладке «Рассмотрено».';
+            textEl.className = 'text-slate-400 text-sm max-w-xl mt-2 leading-relaxed';
+          } else if (applicationFilter === 'reviewed' && applicationReviewFilter === 'accepted') {
+            titleEl.textContent = 'Принятых заявок пока нет';
+            textEl.textContent = 'Заявки, которые вы примете, появятся здесь.';
+            textEl.className = 'text-slate-400 text-sm max-w-xl mt-2 leading-relaxed';
+          } else if (applicationFilter === 'reviewed' && applicationReviewFilter === 'rejected') {
+            titleEl.textContent = 'Отклонённых заявок пока нет';
+            textEl.textContent = 'Заявки, которые вы отклоните, появятся здесь.';
+            textEl.className = 'text-slate-400 text-sm max-w-xl mt-2 leading-relaxed';
+          } else if (applicationFilter === 'reviewed') {
+            titleEl.textContent = 'Рассмотренных заявок пока нет';
+            textEl.textContent = 'Примите или отклоните заявку, и она появится здесь.';
+            textEl.className = 'text-slate-400 text-sm max-w-xl mt-2 leading-relaxed';
           } else {
             titleEl.textContent = 'Заявок пока нет';
             textEl.textContent = 'Когда кто-то отправит заявку через страницу «В команду», она появится здесь.';
             textEl.className = 'text-slate-400 text-sm max-w-xl mt-2 leading-relaxed';
           }
         }
+      }
+    }
+
+    function findTeamApplication(id) {
+      return teamApplications.find((app) => String(app.id) === String(id));
+    }
+
+    async function updateTeamApplicationStatus(id, status) {
+      const app = findTeamApplication(id);
+      if (!app || applicationActionPending.has(String(id))) return;
+
+      const previousStatus = app.status;
+      applicationActionPending.add(String(id));
+      app.status = status;
+      renderApplications();
+
+      try {
+        if (!supabaseClient) throw new Error('Supabase-клиент не инициализирован.');
+        const { data, error } = await supabaseClient
+          .from('team_applications')
+          .update({ status: status })
+          .eq('id', app.id)
+          .select('id');
+
+        if (error) throw error;
+        if (!Array.isArray(data) || data.length === 0) {
+          throw new Error('Нет прав на изменение заявки. Выполните SQL-политики для администратора.');
+        }
+
+        const message = status === 'accepted'
+          ? 'Заявка принята'
+          : status === 'rejected'
+            ? 'Заявка отклонена'
+            : 'Заявка возвращена на рассмотрение';
+        showAdminToast(message, 'success');
+      } catch (err) {
+        app.status = previousStatus;
+        console.error('Team application status error:', err);
+        showAdminToast('Не удалось изменить статус: ' + (err && err.message ? err.message : 'неизвестная ошибка'), 'error');
+      } finally {
+        applicationActionPending.delete(String(id));
+        renderApplications();
+      }
+    }
+
+    async function deleteTeamApplication(id) {
+      const app = findTeamApplication(id);
+      if (!app || applicationActionPending.has(String(id))) return;
+
+      const name = app.name ? String(app.name) : 'без имени';
+      if (!window.confirm(`Удалить заявку от «${name}»? Это действие нельзя отменить.`)) return;
+
+      applicationActionPending.add(String(id));
+      renderApplications();
+
+      try {
+        if (!supabaseClient) throw new Error('Supabase-клиент не инициализирован.');
+        const { data, error } = await supabaseClient
+          .from('team_applications')
+          .delete()
+          .eq('id', app.id)
+          .select('id');
+
+        if (error) throw error;
+        if (!Array.isArray(data) || data.length === 0) {
+          throw new Error('Нет прав на удаление заявки. Выполните SQL-политики для администратора.');
+        }
+
+        teamApplications = teamApplications.filter((item) => String(item.id) !== String(id));
+        showAdminToast('Заявка удалена', 'success');
+      } catch (err) {
+        console.error('Team application delete error:', err);
+        showAdminToast('Не удалось удалить заявку: ' + (err && err.message ? err.message : 'неизвестная ошибка'), 'error');
+      } finally {
+        applicationActionPending.delete(String(id));
+        renderApplications();
       }
     }
 
@@ -1549,6 +1804,9 @@
         teamLoadedOnce = false;
         teamLoadError = '';
         teamSearch = '';
+        applicationFilter = 'pending';
+        applicationReviewFilter = 'all';
+        applicationActionPending.clear();
         const teamSearchInput = document.getElementById('teamSearchInput');
         if (teamSearchInput) teamSearchInput.value = '';
         const applicationsList = document.getElementById('applicationsList');
@@ -1701,6 +1959,34 @@
           renderApplications();
         });
       }
+
+      document.querySelectorAll('[data-app-filter]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          applicationFilter = btn.getAttribute('data-app-filter') || 'pending';
+          if (applicationFilter !== 'reviewed') applicationReviewFilter = 'all';
+          renderApplications();
+        });
+      });
+
+      document.querySelectorAll('[data-app-review]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          applicationReviewFilter = btn.getAttribute('data-app-review') || 'all';
+          renderApplications();
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        const actionBtn = e.target.closest('[data-app-action]');
+        if (!actionBtn) return;
+        const id = actionBtn.getAttribute('data-app-id');
+        const action = actionBtn.getAttribute('data-app-action');
+        if (!id || !action) return;
+        if (action === 'delete') {
+          deleteTeamApplication(id);
+        } else if (action === 'pending' || action === 'accepted' || action === 'rejected') {
+          updateTeamApplicationStatus(id, action);
+        }
+      });
 
       const teamReloadBtn = document.getElementById('teamReloadBtn');
       if (teamReloadBtn) {

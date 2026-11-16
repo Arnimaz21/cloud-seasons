@@ -16,7 +16,7 @@ create table if not exists public.team_applications (
   motivation text not null,
   agreed_rules boolean not null default false,
   agreed_data boolean not null default false,
-  status text not null default 'new'
+  status text not null default 'pending'
 );
 
 alter table public.team_applications enable row level security;
@@ -37,6 +37,23 @@ create policy "team_applications_select_admin"
   to authenticated
   using (true);
 
+-- Only signed-in administrators may review applications.
+drop policy if exists "team_applications_update_admin" on public.team_applications;
+create policy "team_applications_update_admin"
+  on public.team_applications
+  for update
+  to authenticated
+  using (true)
+  with check (true);
+
+-- Only signed-in administrators may delete applications.
+drop policy if exists "team_applications_delete_admin" on public.team_applications;
+create policy "team_applications_delete_admin"
+  on public.team_applications
+  for delete
+  to authenticated
+  using (true);
+
 grant insert on public.team_applications to anon;
-grant select on public.team_applications to authenticated;
+grant select, update, delete on public.team_applications to authenticated;
 grant usage, select on sequence public.team_applications_id_seq to anon;
