@@ -26,6 +26,7 @@
     ".cs-footer-heading{margin-bottom:12px;font-family:'Space Grotesk',sans-serif;font-size:12px;line-height:16px;",
     "font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#fff}",
     ".cs-footer-links{display:flex;flex-direction:column;gap:4px;margin:0;padding:0;list-style:none}",
+    ".cs-footer-nav .cs-footer-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px;row-gap:2px}",
     ".cs-footer-links a{display:inline-block;padding:5px 0;font-family:'Plus Jakarta Sans',sans-serif;",
     "font-size:12px;line-height:18px;color:#94a3b8;text-decoration:none;transition:color .2s}",
     ".cs-footer-links a:hover{color:#fff}",
@@ -44,6 +45,7 @@
     "@media(min-width:1024px){.cs-footer-inner{padding:40px 48px calc(40px + env(safe-area-inset-bottom,0px))}",
     ".cs-footer-grid{grid-template-columns:repeat(12,minmax(0,1fr));gap:40px}",
     ".cs-footer-brand{grid-column:span 4}.cs-footer-nav{grid-column:span 2}",
+    ".cs-footer-nav .cs-footer-links{display:flex;flex-direction:column;gap:4px}",
     ".cs-footer-support{grid-column:span 3}.cs-footer-community{grid-column:span 3}}",
     "@media(max-width:420px){.cs-footer-inner{padding-left:16px;padding-right:16px}.cs-footer-grid{gap:24px}}"
   ].join("");
