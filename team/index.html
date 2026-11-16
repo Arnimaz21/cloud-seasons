@@ -1,0 +1,521 @@
+<!DOCTYPE html><html class="dark" lang="ru"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Вступить в команду — Cloud.Seasons</title>
+<meta content="Заявка в команду Cloud.Seasons: тестировщики, модераторы Minecraft и Discord, дизайнеры, помощники по сайту. Расскажите о себе — мы ответим в Discord." name="description">
+<meta content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" name="robots">
+<meta content="index, follow" name="googlebot">
+<meta content="Cloud.Seasons, команда Cloud.Seasons, набор в команду, модератор Minecraft, модератор Discord, тестировщик Minecraft, дизайнер, помощник по сайту" name="keywords">
+<meta content="Arnimaz21" name="author">
+<link href="https://cloudseasons.cc.cd/team/" rel="canonical">
+<meta content="website" property="og:type">
+<meta content="Вступить в команду — Cloud.Seasons" property="og:title">
+<meta content="Ищем тестировщиков, модераторов Discord, дизайнеров и помощников. Заполните заявку — ответим в Discord." property="og:description">
+<meta content="Cloud.Seasons" property="og:site_name">
+<meta content="https://cloudseasons.cc.cd/team/" property="og:url">
+<meta content="https://cloudseasons.cc.cd/assets/og-image.png" property="og:image">
+<meta content="image/png" property="og:image:type">
+<meta content="1200" property="og:image:width">
+<meta content="630" property="og:image:height">
+<meta content="ru_RU" property="og:locale">
+<meta content="Cloud.Seasons Logo" property="og:image:alt">
+<meta content="summary_large_image" name="twitter:card">
+<meta content="Вступить в команду — Cloud.Seasons" name="twitter:title">
+<meta content="Ищем тестировщиков, модераторов Discord, дизайнеров и помощников. Заполните заявку." name="twitter:description">
+<meta content="https://cloudseasons.cc.cd/assets/og-image.png" name="twitter:image">
+<link href="/assets/logo.jpg" rel="icon" type="image/jpeg">
+<link href="/assets/logo.jpg" rel="shortcut icon">
+<link href="/assets/logo.jpg" rel="apple-touch-icon">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          surface: "#0f131c",
+          panel: "#0a0d14",
+          primary: "#4d8bff",
+          "primary-dark": "#2563eb",
+          mint: "#26e19a"
+        },
+        fontFamily: {
+          sans: ["Plus Jakarta Sans", "sans-serif"],
+          headline: ["Space Grotesk", "sans-serif"]
+        }
+      }
+    }
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #0f131c;
+    color: #e2e8f0;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .field-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+  .field-label .req { color: #ffb4ab; }
+  #teamForm .field-input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: #181b25;
+    color: #e2e8f0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    transition: border-color .15s ease, background-color .15s ease;
+  }
+  #teamForm .field-input::placeholder { color: #5b6779; }
+  #teamForm .field-input:focus {
+    outline: none;
+    border-color: rgba(77, 139, 255, 0.55);
+    background: #1c212e;
+  }
+  #teamForm textarea.field-input { min-height: 132px; resize: vertical; }
+
+  #teamForm .role-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: border-color .15s ease, background-color .15s ease;
+  }
+  #teamForm .role-card:hover { background: rgba(255, 255, 255, 0.04); }
+  #teamForm .role-card:has(input:checked) {
+    border-color: rgba(77, 139, 255, 0.55);
+    background: rgba(77, 139, 255, 0.08);
+  }
+  #teamForm .role-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin: 2px 0 0;
+    border-radius: 7px;
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.04);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background-color .15s ease, border-color .15s ease;
+  }
+  #teamForm .role-checkbox:checked { background: #4d8bff; border-color: #4d8bff; }
+  #teamForm .role-checkbox:checked::after {
+    content: "";
+    width: 11px;
+    height: 6px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translate(-1px, -1px);
+  }
+  #teamForm .role-checkbox:focus-visible { outline: 2px solid rgba(77, 139, 255, 0.55); outline-offset: 2px; }
+
+  #teamForm .consent-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    border-radius: 6px;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.04);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background-color .15s ease, border-color .15s ease;
+  }
+  #teamForm .consent-checkbox:checked { background: #4d8bff; border-color: #4d8bff; }
+  #teamForm .consent-checkbox:checked::after {
+    content: "";
+    width: 9px;
+    height: 5px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translate(-1px, -1px);
+  }
+  #teamForm .consent-checkbox:focus-visible { outline: 2px solid rgba(77, 139, 255, 0.55); outline-offset: 2px; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Вступить в команду — Cloud.Seasons",
+  "url": "https://cloudseasons.cc.cd/team/",
+  "inLanguage": "ru",
+  "isPartOf": { "@type": "WebSite", "name": "Cloud.Seasons", "url": "https://cloudseasons.cc.cd/" }
+}
+</script>
+<link rel="stylesheet" href="/transitions.css"></head>
+<body class="bg-[#0f131c] text-slate-200 font-sans antialiased min-h-screen selection:bg-primary/30 selection:text-white">
+<div id="site-header"></div>
+<script src="/header.js"></script>
+
+<main class="relative w-full overflow-hidden">
+  <div class="absolute inset-x-0 top-0 h-[720px] pointer-events-none select-none overflow-hidden">
+    <img alt="" class="w-full h-full object-cover object-top opacity-55" src="/assets/background.png">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0f131c]/35 via-[#0f131c]/80 to-[#0f131c]"></div>
+    <div class="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-[#0f131c] to-transparent"></div>
+  </div>
+
+  <div class="relative z-10 w-full max-w-[880px] mx-auto px-4 sm:px-6 pt-28 pb-16">
+    <div class="flex flex-col items-center text-center gap-4 mb-8">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-[11px] font-headline font-bold text-slate-300 tracking-widest shadow-sm backdrop-blur-md">
+        <span class="material-symbols-outlined text-[15px] text-mint">group_add</span>
+        <span>КОМАНДА ПРОЕКТА</span>
+      </div>
+      <h1 class="font-headline text-3xl sm:text-5xl font-bold tracking-tight text-white leading-[1.12] drop-shadow-md">
+        Вступить в команду
+        <span class="bg-gradient-to-r from-white via-[#b4cfff] to-[#4d8bff] bg-clip-text text-transparent">Cloud.Seasons</span>
+      </h1>
+      <p class="text-sm sm:text-base text-slate-400 max-w-2xl leading-relaxed">
+        Мы собираем команду, которая делает проект живым: тестирует сборки, следит за порядком,
+        пишет тексты, рисует и помогает с сайтом. Заполните заявку — это займёт пару минут.
+      </p>
+    </div>
+
+    <div class="rounded-3xl bg-panel/85 border border-white/10 backdrop-blur-2xl shadow-[0_24px_64px_rgba(0,0,0,0.65)] p-6 sm:p-9">
+      <div class="flex items-start gap-4 mb-7">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#2563eb]/40 to-[#4d8bff]/30 border border-[#4d8bff]/30 flex items-center justify-center text-primary shadow-inner shrink-0">
+          <span class="material-symbols-outlined">support_agent</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <h2 class="font-headline text-xl font-bold tracking-tight text-white">Заявка в команду</h2>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Поля со звёздочкой обязательны. Мы читаем каждую заявку и отвечаем в Discord или Telegram.
+          </p>
+        </div>
+      </div>
+
+      <div class="hidden flex-col gap-2 p-5 rounded-2xl bg-[#1c212e] border border-mint/20 shadow-[0_0_24px_rgba(38,225,154,0.18)] mb-6" id="teamSuccess">
+        <div class="flex items-center gap-2.5 text-mint">
+          <span class="material-symbols-outlined text-[22px]">check_circle</span>
+          <span class="font-headline text-sm font-bold text-white">Заявка отправлена!</span>
+        </div>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Спасибо, что хотите помочь проекту. Мы свяжемся с вами в Discord или Telegram,
+          когда рассмотрим заявку. Обычно это занимает несколько дней.
+        </p>
+      </div>
+
+      <div class="hidden flex-col gap-2 p-5 rounded-2xl bg-[#1c212e] border border-[#ffb4ab]/20 shadow-[0_0_24px_rgba(255,180,171,0.15)] mb-6" id="teamError">
+        <div class="flex items-center gap-2.5 text-[#ffb4ab]">
+          <span class="material-symbols-outlined text-[22px]">error</span>
+          <span class="font-headline text-sm font-bold text-white">Не удалось отправить заявку</span>
+        </div>
+        <p class="text-sm text-slate-400 leading-relaxed" id="teamErrorMessage">
+          Попробуйте ещё раз или напишите нам напрямую в Discord.
+        </p>
+        <a class="inline-flex w-fit items-center gap-1.5 text-xs font-semibold text-[#82aaff] hover:text-white transition-colors" href="https://discord.gg/EJnDZhfPxQ" target="_blank" rel="noopener noreferrer">
+          Открыть Discord Cloud.Seasons
+          <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+        </a>
+      </div>
+
+      <form class="flex flex-col gap-6" id="teamForm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="field-label" for="discord">Discord <span class="req">*</span></label>
+            <input class="field-input" id="discord" maxlength="80" name="discord" placeholder="nickname или ссылка на профиль" required type="text">
+          </div>
+          <div>
+            <label class="field-label" for="telegram">Telegram <span class="normal-case tracking-normal font-normal text-slate-500">(необязательно)</span></label>
+            <input class="field-input" id="telegram" maxlength="80" name="telegram" placeholder="@username" type="text">
+          </div>
+          <div>
+            <label class="field-label" for="displayName">Как к вам обращаться <span class="req">*</span></label>
+            <input class="field-input" id="displayName" maxlength="60" name="displayName" placeholder="Имя или ник" required type="text">
+          </div>
+          <div>
+            <label class="field-label" for="age">Возраст <span class="req">*</span></label>
+            <input class="field-input" id="age" max="120" min="1" name="age" placeholder="Например: 17" required type="number">
+          </div>
+          <div>
+            <label class="field-label" for="timezone">Часовой пояс <span class="req">*</span></label>
+            <input class="field-input" id="timezone" maxlength="60" name="timezone" placeholder="Например: МСК (UTC+3)" required type="text">
+          </div>
+          <div>
+            <label class="field-label" for="minecraftYears">Сколько лет играете в Minecraft <span class="req">*</span></label>
+            <input class="field-input" id="minecraftYears" maxlength="60" name="minecraftYears" placeholder="Например: 6 лет" required type="text">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="field-label" for="weeklyHours">Сколько времени сможете уделять проекту <span class="req">*</span></label>
+            <input class="field-input" id="weeklyHours" maxlength="80" name="weeklyHours" placeholder="Например: 8–10 часов в неделю, чаще по вечерам" required type="text">
+          </div>
+        </div>
+
+        <fieldset class="flex flex-col gap-3">
+          <legend class="field-label">Роль <span class="req">*</span></legend>
+          <p class="text-sm text-slate-400 -mt-1 mb-1">Можно выбрать несколько. Начните с той, где у вас больше опыта.</p>
+
+          <div class="flex flex-col gap-3" id="roleList">
+            <label class="role-card">
+              <input class="role-checkbox" name="roles" type="checkbox" value="Тестировщик">
+              <span class="flex flex-col gap-1">
+                <span class="font-headline text-base font-bold text-white">Тестировщик</span>
+                <span class="text-sm text-slate-400 leading-relaxed">Проверяет сборки, ищет баги, пишет понятные отчёты</span>
+              </span>
+            </label>
+            <label class="role-card">
+              <input class="role-checkbox" name="roles" type="checkbox" value="Модератор Minecraft">
+              <span class="flex flex-col gap-1">
+                <span class="font-headline text-base font-bold text-white">Модератор Minecraft</span>
+                <span class="text-sm text-slate-400 leading-relaxed">Следит за порядком на сервере, помогает игрокам, разбирает нарушения</span>
+              </span>
+            </label>
+            <label class="role-card">
+              <input class="role-checkbox" name="roles" type="checkbox" value="Модератор Discord">
+              <span class="flex flex-col gap-1">
+                <span class="font-headline text-base font-bold text-white">Модератор Discord</span>
+                <span class="text-sm text-slate-400 leading-relaxed">Следит за порядком, отвечает на вопросы, 14+</span>
+              </span>
+            </label>
+            <label class="role-card">
+              <input class="role-checkbox" name="roles" type="checkbox" value="Идейщик / консультант">
+              <span class="flex flex-col gap-1">
+                <span class="font-headline text-base font-bold text-white">Идейщик / консультант</span>
+                <span class="text-sm text-slate-400 leading-relaxed">Механики, сборки, баланс, предложения</span>
+              </span>
+            </label>
+            <label class="role-card">
+              <input class="role-checkbox" name="roles" type="checkbox" value="Помощник по сайту">
+              <span class="flex flex-col gap-1">
+                <span class="font-headline text-base font-bold text-white">Помощник по сайту</span>
+                <span class="text-sm text-slate-400 leading-relaxed">Вёрстка, тексты, проверка мобильной версии</span>
+              </span>
+            </label>
+            <label class="role-card">
+              <input class="role-checkbox" name="roles" type="checkbox" value="Дизайнер">
+              <span class="flex flex-col gap-1">
+                <span class="font-headline text-base font-bold text-white">Дизайнер</span>
+                <span class="text-sm text-slate-400 leading-relaxed">Иконки, баннеры, оформление страниц</span>
+              </span>
+            </label>
+            <label class="role-card">
+              <input class="role-checkbox" id="roleCustom" name="roles" type="checkbox" value="Свой вариант">
+              <span class="flex flex-col gap-1">
+                <span class="font-headline text-base font-bold text-white">Свой вариант</span>
+                <span class="text-sm text-slate-400 leading-relaxed">Опишите роль, которую хотите предложить</span>
+              </span>
+            </label>
+          </div>
+
+          <div class="hidden flex-col gap-2" id="customRoleWrap">
+            <label class="field-label" for="customRoleInput">Ваша роль <span class="req">*</span></label>
+            <input class="field-input" id="customRoleInput" maxlength="120" placeholder="Например: монтаж видео для роликов о сборках" type="text">
+          </div>
+        </fieldset>
+
+        <div>
+          <label class="field-label" for="motivation">Почему хотите помочь проекту <span class="req">*</span></label>
+          <textarea class="field-input" id="motivation" maxlength="2000" name="motivation" placeholder="Расскажите, что вас мотивирует, какой у вас опыт и что хотите делать в команде" required></textarea>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-[#151923]/70 p-5 flex flex-col gap-3">
+          <div class="field-label">Согласия <span class="req">*</span></div>
+          <label class="flex items-start gap-3 text-sm text-slate-300 leading-relaxed cursor-pointer">
+            <input class="consent-checkbox" id="agreeRules" required type="checkbox">
+            <span>Я прочитал(а) <a class="text-[#82aaff] hover:text-white transition-colors underline decoration-[#82aaff]/30 underline-offset-2" href="/rules/">правила проекта</a> и обязуюсь их соблюдать.</span>
+          </label>
+          <label class="flex items-start gap-3 text-sm text-slate-300 leading-relaxed cursor-pointer">
+            <input class="consent-checkbox" id="agreeData" required type="checkbox">
+            <span>Я согласен(на) на обработку указанных контактов (Discord, Telegram) для связи по заявке.</span>
+          </label>
+        </div>
+
+        <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 pt-1">
+          <a class="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors" href="/">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            Вернуться на главную
+          </a>
+          <button class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-primary-dark text-white font-headline text-sm font-bold shadow-[0_0_24px_rgba(82,141,255,0.45)] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-wait" id="teamSubmit" type="submit">
+            <span class="material-symbols-outlined text-[18px]" id="teamBtnIcon">send</span>
+            <span id="teamBtnText">Отправить заявку</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <p class="text-center text-xs text-slate-500 leading-relaxed mt-6">
+      Отправляя заявку, вы соглашаетесь с <a class="text-[#82aaff] hover:text-white transition-colors" href="/rules/">правилами проекта</a>.
+      Мы не публикуем заявки и не передаём контакты третьим лицам.
+    </p>
+  </div>
+</main>
+
+<footer class="relative z-10 w-full border-t border-white/10 bg-[#0b0e15]/95 backdrop-blur-md mt-8 sm:mt-12">
+  <div class="max-w-[880px] mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+    <div class="flex items-center gap-2">
+      <img src="/assets/logo.jpg" alt="" class="w-6 h-6 rounded-lg border border-white/10">
+      <span>Cloud.Seasons · Minecraft проект</span>
+    </div>
+    <div class="flex items-center gap-5">
+      <a class="hover:text-white transition-colors" href="/">Главная</a>
+      <a class="hover:text-white transition-colors" href="/team/">В команду</a>
+      <a class="hover:text-white transition-colors" href="/rules/">Правила</a>
+      <a class="hover:text-white transition-colors" href="https://discord.gg/EJnDZhfPxQ" target="_blank" rel="noopener noreferrer">Discord</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    "use strict";
+
+    var SUPABASE_URL = "https://qhhydacgopeilnumuevi.supabase.co";
+    var SUPABASE_ANON = "sb_publishable_TfKivMM0Bh8YtUECbC1_Vw_GJrKhKoR";
+
+    var form = document.getElementById("teamForm");
+    var submitBtn = document.getElementById("teamSubmit");
+    var btnText = document.getElementById("teamBtnText");
+    var btnIcon = document.getElementById("teamBtnIcon");
+    var successAlert = document.getElementById("teamSuccess");
+    var errorAlert = document.getElementById("teamError");
+    var errorMessage = document.getElementById("teamErrorMessage");
+    var customToggle = document.getElementById("roleCustom");
+    var customWrap = document.getElementById("customRoleWrap");
+    var customInput = document.getElementById("customRoleInput");
+    var roleBoxes = Array.prototype.slice.call(document.querySelectorAll('input[name="roles"]'));
+
+    function syncCustomRole() {
+      var enabled = customToggle.checked;
+      customWrap.classList.toggle("hidden", !enabled);
+      customWrap.classList.toggle("flex", enabled);
+      customInput.required = enabled;
+      if (enabled) customInput.focus();
+    }
+
+    if (customToggle) {
+      customToggle.addEventListener("change", syncCustomRole);
+    }
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      successAlert.classList.add("hidden");
+      successAlert.classList.remove("flex");
+      errorAlert.classList.remove("hidden");
+      errorAlert.classList.add("flex");
+      errorAlert.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function setLoading(loading) {
+      submitBtn.disabled = loading;
+      btnText.textContent = loading ? "Отправляем..." : "Отправить заявку";
+      btnIcon.textContent = loading ? "timer" : "send";
+      btnIcon.classList.toggle("animate-spin", loading);
+    }
+
+    if (!form) return;
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      successAlert.classList.add("hidden");
+      successAlert.classList.remove("flex");
+      errorAlert.classList.add("hidden");
+      errorAlert.classList.remove("flex");
+
+      var roles = roleBoxes
+        .filter(function (box) { return box.checked && box.value !== "Свой вариант"; })
+        .map(function (box) { return box.value; });
+      var customRole = customToggle.checked ? customInput.value.trim() : "";
+      var motivation = document.getElementById("motivation").value.trim();
+      var agreeRules = document.getElementById("agreeRules");
+      var agreeData = document.getElementById("agreeData");
+
+      if (!roles.length && !customToggle.checked) {
+        showError("Выберите хотя бы одну роль или укажите свой вариант.");
+        return;
+      }
+
+      if (customToggle.checked && !customRole) {
+        showError("Опишите свою роль в поле «Ваша роль».");
+        customInput.focus();
+        return;
+      }
+
+      if (!motivation) {
+        showError("Расскажите, почему хотите помочь проекту.");
+        document.getElementById("motivation").focus();
+        return;
+      }
+
+      if (!agreeRules.checked || !agreeData.checked) {
+        showError("Для отправки заявки нужно поставить оба согласия.");
+        return;
+      }
+
+      var payload = {
+        discord: document.getElementById("discord").value.trim(),
+        telegram: document.getElementById("telegram").value.trim() || null,
+        name: document.getElementById("displayName").value.trim(),
+        age: Number(document.getElementById("age").value),
+        timezone: document.getElementById("timezone").value.trim(),
+        minecraft_years: document.getElementById("minecraftYears").value.trim(),
+        weekly_hours: document.getElementById("weeklyHours").value.trim(),
+        roles: roles.join(", ") || "Свой вариант",
+        custom_role: customRole || null,
+        motivation: motivation,
+        agreed_rules: true,
+        agreed_data: true,
+        status: "new"
+      };
+
+      setLoading(true);
+
+      try {
+        var response = await fetch(SUPABASE_URL + "/rest/v1/team_applications", {
+          method: "POST",
+          headers: {
+            apikey: SUPABASE_ANON,
+            Authorization: "Bearer " + SUPABASE_ANON,
+            "Content-Type": "application/json",
+            Prefer: "return=minimal"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          var details = await response.json().catch(function () { return {}; });
+          throw new Error(details.message || "Ошибка сервера (" + response.status + ")");
+        }
+
+        form.reset();
+        syncCustomRole();
+        successAlert.classList.remove("hidden");
+        successAlert.classList.add("flex");
+        successAlert.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      } catch (error) {
+        console.error("Team application error:", error);
+        showError("Не удалось отправить заявку: " + (error.message || "сбой сети") + ". Напишите нам в Discord — мы поможем.");
+      } finally {
+        setLoading(false);
+      }
+    });
+  })();
+</script>
+</body></html>

@@ -17,7 +17,7 @@
     { href: "/", label: "Главная", active: path === "/" },
     { href: "/modpacks/", label: "Сборки", active: path === "/modpacks" },
     { href: "/join/", label: "Как играть", active: path === "/join" },
-    { href: "/download/", label: "Скачать", active: path === "/download" },
+    { href: "/team/", label: "В команду", active: path === "/team" },
     { href: "/rules/", label: "Правила", active: path === "/rules" },
     { href: "/bug-report/", label: "Сообщить о баге", active: path === "/bug-report" }
   ];
